@@ -46,6 +46,35 @@ void test_insert_once()
   ioopm_hash_table_destroy(ht);
 }
 
+void test_insert_already_exisiting_key()
+{
+    // Creates a new hash_table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    // Initial key value pair
+    char *key = "abc";
+    int value = 123;
+
+    // Insert initial key value pair into the ht
+    ioopm_hash_table_insert(ht, key, value);
+
+    // Check if insertion was successful
+    int result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+    CU_ASSERT_EQUAL(value, result);
+
+    // Insert new value with same key
+    result = 0;
+    int new_value = 321;
+    ioopm_hash_table_insert(ht, key, new_value);
+
+    // Check if the result is the new value
+    CU_ASSERT_EQUAL(result, new_value);
+
+    // Destroy the hash_table
+    ioopm_hash_table_destroy(ht);
+}
+
 int main()
 {
     // First we try to set up CUnit, and exit if we fail
