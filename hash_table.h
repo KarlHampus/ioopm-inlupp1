@@ -12,13 +12,15 @@
  *
  */
 
-typedef struct hash_table
-{
-    int max_length;
-    int element_count;
-    int *values;
-    int hash_function; // DODGED, TODO: type properly
-} ioopm_hash_table_t;
+typedef struct hash_table ioopm_hash_table_t;
+
+// INITAL IDEA
+// {
+//     int max_length;
+//     int element_count;
+//     int *values;
+//     int hash_function; // DODGED, TODO: type properly
+// } ioopm_hash_table_t;
 
 /// @brief Create a new hash table
 /// @return A new empty hash table
