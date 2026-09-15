@@ -99,6 +99,7 @@ int main()
     if (
         (CU_add_test(my_test_suite, "Tests creating and destroying a hash table.", test_create_destroy) == NULL) ||
         (CU_add_test(my_test_suite, "Tests insert and lookup functionality.", test_insert_once) == NULL) ||
+        (CU_add_test(my_test_suite, "Tests insert on already exisiting key.", test_insert_already_exisiting_key) == NULL) ||
         0)
     {
         // If adding any of the tests fails, we tear down CUnit and exit
