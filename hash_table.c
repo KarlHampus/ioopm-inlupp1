@@ -1,5 +1,6 @@
 #include "hash_table.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct entry entry_t;
 
@@ -26,4 +27,19 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
     free(ht);
     return;
+}
+
+void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value) {
+  // TODO: Stub
+  (void) ht;
+  (void) key;
+  (void) value;
+}
+
+bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result) {
+  // TODO: Stub
+  (void) ht;
+  (void) result;
+  (void) key;
+  return false;
 }
