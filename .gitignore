@@ -5,6 +5,8 @@
 # and anything with an extension
 !*.*
 
+!makefile
+
 # Prerequisites
 *.d
 
