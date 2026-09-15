@@ -1,4 +1,4 @@
-#include "hash_table.h";
+#include "hash_table.h"
 #include <stdlib.h>
 
 ioopm_hash_table_t *ioopm_hash_table_create(void)

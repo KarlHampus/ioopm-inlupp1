@@ -1,4 +1,5 @@
 #include <CUnit/Basic.h>
+#include "hash_table.h"
 
 int init_suite(void)
 {
@@ -16,9 +17,11 @@ int clean_suite(void)
 
 // These are example test functions. You should replace them with
 // functions of your own.
-void test(void)
+void test_create_destroy()
 {
-    CU_ASSERT(42);
+   ioopm_hash_table_t *ht = ioopm_hash_table_create();
+   CU_ASSERT_PTR_NOT_NULL(ht);
+   ioopm_hash_table_destroy(ht);
 }
 
 int main()
@@ -29,7 +32,7 @@ int main()
 
     // We then create an empty test suite and specify the name and
     // the init and cleanup functions
-    CU_pSuite my_test_suite = CU_add_suite("My awesome test suite", init_suite, clean_suite);
+    CU_pSuite my_test_suite = CU_add_suite("Hash table test suite", init_suite, clean_suite);
     if (my_test_suite == NULL)
     {
         // If the test suite could not be added, tear down CUnit and exit
@@ -43,7 +46,7 @@ int main()
     // the test in question. If you want to add another test, just
     // copy a line below and change the information
     if (
-        (CU_add_test(my_test_suite, "Tests creating and destroying a hash tabl.", test_create_destroy) == NULL) ||
+        (CU_add_test(my_test_suite, "Tests creating and destroying a hash table.", test_create_destroy) == NULL) ||
         0)
     {
         // If adding any of the tests fails, we tear down CUnit and exit
