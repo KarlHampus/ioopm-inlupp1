@@ -24,7 +24,6 @@ ioopm_hash_table_t *ioopm_hash_table_create(void)
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
-    // TODO: Stub
     free(ht);
     return;
 }
