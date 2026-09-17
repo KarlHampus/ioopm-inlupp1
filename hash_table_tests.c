@@ -46,30 +46,44 @@ void test_insert_once()
   ioopm_hash_table_destroy(ht);
 }
 
+static void test_insert_lookup(ioopm_hash_table_t *ht, char *key, int value)
+{
+    // Insert value 1 with key 2, should replace old value
+    ioopm_hash_table_insert(ht, key, value);
+
+    // Check if lookup with key 2 gives value 1
+    int result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+    CU_ASSERT_EQUAL(value, result);
+}
+
 void test_insert_already_exisiting_key()
 {
     // Creates a new hash_table
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
 
-    // Initial key value pair
+    // Initial key value pairs
     char *key = "abc";
+    char *key2 = "abcd";
+    char *key3 = ""; // Empty string, should be possible :)
     int value = 123;
+    int value2 = 321;
+    int value3 = 1;
 
-    // Insert initial key value pair into the ht
-    ioopm_hash_table_insert(ht, key, value);
+    // Testing insert and change value of key 1
+    test_insert_lookup(ht, key, value);
+    test_insert_lookup(ht, key, value2);
 
-    // Check if insertion was successful
-    int result = 0;
-    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
-    CU_ASSERT_EQUAL(value, result);
+    // Testing insert and change value of key 2
+    test_insert_lookup(ht, key2, value2);
+    test_insert_lookup(ht, key2, value);
 
-    // Insert new value with same key
-    result = 0;
-    int new_value = 321;
-    ioopm_hash_table_insert(ht, key, new_value);
+    // Testing insert and change value of key 3
+    test_insert_lookup(ht, key3, value3);
+    test_insert_lookup(ht, key3, value);
 
-    // Check if the result is the new value
-    CU_ASSERT_EQUAL(result, new_value);
+    // Testing insert and change value of key 1 after key 2 and 3 are in ht
+    test_insert_lookup(ht, key, value3);
 
     // Destroy the hash_table
     ioopm_hash_table_destroy(ht);
