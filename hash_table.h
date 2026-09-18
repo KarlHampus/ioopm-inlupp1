@@ -1,7 +1,6 @@
 #pragma once
 #include <stdbool.h>
 
-
 /**
  * @file hash_table.h
  * @author Olof Halvarsson & Hampus Thell
@@ -48,5 +47,6 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result);
 /// @brief remove any mapping from key to a value
 /// @param ht hash table operated upon
 /// @param key key to remove
-/// @return the value mapped to by key (FIXME: what if the key does not exist?)
-int ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key);
+/// @param result where the looked up value will be stored if found
+/// @return true if the remove was successful, otherwise false
+bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result);

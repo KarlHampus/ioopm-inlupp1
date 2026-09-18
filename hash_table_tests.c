@@ -57,6 +57,48 @@ static void test_insert_lookup(ioopm_hash_table_t *ht, char *key, int value)
     CU_ASSERT_EQUAL(value, result);
 }
 
+void test_remove_entry()
+{
+    // Creates a new hash_table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    // Initial key value pairs
+    char *key = "abc";
+    char *key2 = "abcd";
+    char *key3 = ""; // Empty string, should be possible :)
+    int value = 123;
+    int value2 = 321;
+    int value3 = 1;
+
+    // Test removing a non existing key
+    int result = 0;
+    CU_ASSERT_FALSE(ioopm_hash_table_remove(ht, key, &result));
+    CU_ASSERT_EQUAL(result, 0);
+
+    // Insert test values
+    ioopm_hash_table_insert(ht, key, value);
+
+    // Test removing the last element in a bucket
+    result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_remove(ht, key, &result));
+    CU_ASSERT_EQUAL(result, value);
+
+    // Test to make sure element was removed properly
+    CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
+
+    // Insert new test data
+    ioopm_hash_table_insert(ht, key, value);
+    ioopm_hash_table_insert(ht, key2, value2);
+    ioopm_hash_table_insert(ht, key3, value3);
+
+    // Test removing existing key in the middle
+    result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_remove(ht, key2, &result));
+    CU_ASSERT_EQUAL(result, value2);
+
+    ioopm_hash_table_destroy(ht);
+}
+
 void test_insert_already_exisiting_key()
 {
     // Creates a new hash_table
@@ -114,6 +156,7 @@ int main()
         (CU_add_test(my_test_suite, "Tests creating and destroying a hash table.", test_create_destroy) == NULL) ||
         (CU_add_test(my_test_suite, "Tests insert and lookup functionality.", test_insert_once) == NULL) ||
         (CU_add_test(my_test_suite, "Tests insert on already exisiting key.", test_insert_already_exisiting_key) == NULL) ||
+        (CU_add_test(my_test_suite, "Test removing entries", test_remove_entry) == NULL) ||
         0)
     {
         // If adding any of the tests fails, we tear down CUnit and exit

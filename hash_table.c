@@ -98,6 +98,32 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value)
     }
 }
 
+bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result)
+{
+    // look for an entry with the key we want
+    entry_t *previous = find_previous_entry(ht, key);
+
+    // if the key exists, return the value, otherwise, indicate that the lookup failed.
+    if (previous->next != NULL)
+    {
+        entry_t *to_remove = previous->next;
+
+        // relink
+        previous->next = to_remove->next;
+
+        // Save removed value
+        *result = to_remove->value;
+
+        // Free value memory
+        entry_destroy(to_remove);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result)
 {
     // look for an entry with the key we want
