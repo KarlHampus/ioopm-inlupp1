@@ -103,7 +103,7 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result)
     // look for an entry with the key we want
     entry_t *previous = find_previous_entry(ht, key);
 
-    // if the key exists, return the value, otherwise, indicate that the lookup failed
+    // if the key exists, return the value, otherwise, indicate that the lookup failed.
     if (previous->next != NULL)
     {
         *result = previous->next->value;

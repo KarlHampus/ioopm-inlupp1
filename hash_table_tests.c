@@ -19,31 +19,31 @@ int clean_suite(void)
 // functions of your own.
 void test_create_destroy()
 {
-   ioopm_hash_table_t *ht = ioopm_hash_table_create();
-   CU_ASSERT_PTR_NOT_NULL(ht);
-   ioopm_hash_table_destroy(ht);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+    CU_ASSERT_PTR_NOT_NULL(ht);
+    ioopm_hash_table_destroy(ht);
 }
 
 void test_insert_once()
 {
-  // create new hash table
-  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+    // create new hash table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
 
-  char *key = "abc";
-  int value = 123;
+    char *key = "abc";
+    int value = 123;
 
-  // check that key is not in ht
-  int result = 0;
-  CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, 0);
+    // check that key is not in ht
+    int result = 0;
+    CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
+    CU_ASSERT_EQUAL(result, 0);
 
-  // insert key-value pair and check that the mapping exists
-  ioopm_hash_table_insert(ht, key, value);
-  CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, value);
+    // insert key-value pair and check that the mapping exists
+    ioopm_hash_table_insert(ht, key, value);
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+    CU_ASSERT_EQUAL(result, value);
 
-  // destroy hash table
-  ioopm_hash_table_destroy(ht);
+    // destroy hash table
+    ioopm_hash_table_destroy(ht);
 }
 
 static void test_insert_lookup(ioopm_hash_table_t *ht, char *key, int value)
@@ -51,7 +51,7 @@ static void test_insert_lookup(ioopm_hash_table_t *ht, char *key, int value)
     // Insert value 1 with key 2, should replace old value
     ioopm_hash_table_insert(ht, key, value);
 
-    // Check if lookup with key 2 gives value 1
+    // Check if lookup with key 2 gives value 1.
     int result = 0;
     CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
     CU_ASSERT_EQUAL(value, result);
