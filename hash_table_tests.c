@@ -223,6 +223,32 @@ void test_insert_already_existing_key_into_ht_with_values()
     ioopm_hash_table_destroy(ht);
 }
 
+void test_hash_table_has_nonexisting_key()
+{
+}
+
+void test_hash_table_has_existing_key()
+{
+}
+
+void test_hash_table_has_multiple_keys()
+{
+}
+
+void test_hash_table_has_removed_key()
+{
+}
+
+void test_hash_table_has_one_removed_two_remaining_keys()
+{
+}
+
+void test_hash_table_is_empty()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+    CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+}
+
 int main()
 {
     // First we try to set up CUnit, and exit if we fail

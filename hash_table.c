@@ -148,3 +148,22 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result)
         return false;
     }
 }
+
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key)
+{
+    (void)ht;
+    (void)key;
+    return false;
+}
+
+bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht)
+{
+    (void)ht;
+    return false;
+}
+
+int ioopm_hash_table_size(ioopm_hash_table_t *ht)
+{
+    (void)ht;
+    return 0;
+}

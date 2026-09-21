@@ -42,3 +42,19 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result);
 /// @param result where the looked up value will be stored if found
 /// @return true if the remove was successful, otherwise false
 bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result);
+
+/// @brief verify whether a given hashtable has a value for a given key.
+/// @param ht hash table operated upon
+/// @param key key to verify
+/// @return true if the key exists, false otherwise
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key);
+
+/// @brief verify whether a given hashtable is empty
+/// @param ht hash table to verify
+/// @return true if the hashtable has no keys, otherwise false.
+bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht);
+
+/// @brief retrieve the size of a hashtable
+/// @param ht hash table to verify
+/// @return the number of entries stored in the given hashtable.
+int ioopm_hash_table_size(ioopm_hash_table_t *ht);
