@@ -20,6 +20,7 @@ struct hash_table
 {
     // DODGE: hard-coding number of buckets as 17.
     // NOTE: addressing this dodge is optional.
+    unsigned int size;
     entry_t buckets[No_Buckets];
 };
 
@@ -68,7 +69,9 @@ static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
 
 ioopm_hash_table_t *ioopm_hash_table_create(void)
 {
-    return calloc(1, sizeof(ioopm_hash_table_t));
+    ioopm_hash_table_t *ht = calloc(1, sizeof(ioopm_hash_table_t));
+    ht->size = 0;
+    return ht;
 }
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
@@ -103,6 +106,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value)
     else
     {
         previous->next = entry_create(key, value, NULL);
+        ht->size++;
     }
 }
 
@@ -124,6 +128,7 @@ bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result)
 
         // Free value memory
         entry_destroy(to_remove);
+        ht->size--;
         return true;
     }
     else
@@ -151,19 +156,17 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result)
 
 bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key)
 {
-    (void)ht;
-    (void)key;
-    return false;
+    // look for an entry with the key we want
+    entry_t *previous = find_previous_entry(ht, key);
+    return previous->next != NULL; // Key exists.
 }
 
 bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht)
 {
-    (void)ht;
-    return false;
+    return ht->size == 0;
 }
 
 int ioopm_hash_table_size(ioopm_hash_table_t *ht)
 {
-    (void)ht;
-    return 0;
+    return ht->size;
 }
