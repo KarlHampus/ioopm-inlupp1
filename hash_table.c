@@ -29,7 +29,7 @@ struct hash_table
 static entry_t *entry_create(char *key, int value, entry_t *next)
 {
     entry_t *new = malloc(sizeof(entry_t));
-    new->key = key;
+    new->key = strdup(key);
     new->value = value;
     new->next = next;
     return new;
@@ -37,6 +37,7 @@ static entry_t *entry_create(char *key, int value, entry_t *next)
 
 static void entry_destroy(entry_t *entry)
 {
+    free(entry->key);
     free(entry);
 }
 
