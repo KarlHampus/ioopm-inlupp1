@@ -1,5 +1,6 @@
 #include <CUnit/Basic.h>
 #include "hash_table.h"
+#include <string.h>
 
 int init_suite(void)
 {
@@ -310,6 +311,108 @@ void test_ht_has_one_removed_two_remaining_keys()
     ioopm_hash_table_destroy(ht);
 }
 
+
+void test_size_of_empty_ht()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_size_of_singleton_ht()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    ioopm_hash_table_insert(ht, "abc", 1);
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 1);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_size_of_two_element_ht()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    ioopm_hash_table_insert(ht, "abc", 1);
+    ioopm_hash_table_insert(ht, "abcd", 2);
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 2);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_size_of_two_element_same_bucket_ht()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    // Same bucket for 17 buckets !!!!
+    ioopm_hash_table_insert(ht, "Aa", 1);
+    ioopm_hash_table_insert(ht, "BB", 2);
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 2);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_size_of_ht_after_one_remove()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    ioopm_hash_table_insert(ht, "abc", 1);
+    ioopm_hash_table_insert(ht, "abcd", 2);
+    ioopm_hash_table_insert(ht, "abcde", 3);
+
+    int result = 0;
+    ioopm_hash_table_remove(ht, "abcd", &result);
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 2);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_size_of_ht_after_remove_of_last_element()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    ioopm_hash_table_insert(ht, "abc", 1);
+
+    int result = 0;
+    ioopm_hash_table_remove(ht, "abc", &result);
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_size_of_ht_after_many_inserts()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    int total_inserts = 0;
+    char key[4];
+    key[3] = '\0';
+
+    for (char ch1 = 'a'; ch1 <= 'z'; ch1++) {
+        key[0] = ch1;
+        for (char ch2 = 'a'; ch2 <= 'z'; ch2++) {
+            key[1] = ch2;
+            for (char ch3 = 'a'; ch3 <= 'z'; ch3++) {
+                key[2] = ch3;
+
+                ioopm_hash_table_insert(ht, key, total_inserts);
+                total_inserts++;
+            }
+        }
+    }
+
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), total_inserts);
+
+    ioopm_hash_table_destroy(ht);
+}
+
 void test_hash_table_is_empty()
 {
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -361,6 +464,22 @@ int main()
             test_ht_has_removed_key) == NULL) ||
         (CU_add_test(my_test_suite, "Test ht doesnt have removed key but others remain.",
             test_ht_has_one_removed_two_remaining_keys) == NULL) ||
+
+        // Size tests
+        (CU_add_test(my_test_suite, "Test size of empty ht.",
+            test_size_of_empty_ht) == NULL) ||
+        (CU_add_test(my_test_suite, "Test size of singleton ht.",
+            test_size_of_singleton_ht) == NULL) ||
+        (CU_add_test(my_test_suite, "Test size of two element ht.",
+            test_size_of_two_element_ht) == NULL) ||
+        (CU_add_test(my_test_suite, "Test size of two elements in same bucket ht.",
+            test_size_of_two_element_same_bucket_ht) == NULL) ||
+        (CU_add_test(my_test_suite, "Test size of ht after one remove.",
+            test_size_of_ht_after_one_remove) == NULL) ||
+        (CU_add_test(my_test_suite, "Test size of ht after removing last element.",
+            test_size_of_ht_after_remove_of_last_element) == NULL) ||
+        (CU_add_test(my_test_suite, "Test size of ht after many inserts.",
+            test_size_of_ht_after_many_inserts) == NULL) ||
         0)
     {
         // If adding any of the tests fails, we tear down CUnit and exit
