@@ -9,7 +9,7 @@
 
 typedef struct entry entry_t;
 
-static struct entry
+struct entry
 {
     char *key;     // holds the key
     int value;     // holds the value
@@ -74,7 +74,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(void)
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
-    for (int i = 0; i < No_Buckets; i++) 
+    for (int i = 0; i < No_Buckets; i++)
     {
         entry_t *current_bucket = ht->buckets[i].next;
 
