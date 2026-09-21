@@ -283,7 +283,6 @@ void test_ht_has_removed_key()
     CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key));
 
     ioopm_hash_table_destroy(ht);
-
 }
 
 void test_ht_has_one_removed_two_remaining_keys()
@@ -419,6 +418,53 @@ void test_hash_table_is_empty()
     CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
 }
 
+void test_empty_hash_table_is_empty()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+    CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+}
+
+void test_singleton_hash_table_is_not_empty()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "key1";
+    int value1 = 123;
+
+    ioopm_hash_table_insert(ht, key1, value1);
+    CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+}
+
+void test_larger_hash_table_is_not_empty()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "key1";
+    char *key2 = "key2";
+    char *key3 = "key3";
+    int value1 = 123;
+    int value2 = 456;
+    int value3 = 789;
+
+    ioopm_hash_table_insert(ht, key1, value1);
+    ioopm_hash_table_insert(ht, key2, value2);
+    ioopm_hash_table_insert(ht, key3, value3);
+    CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+}
+void test_hash_table_insert_then_remove_is_empty()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "key1";
+    int value1 = 123;
+
+    ioopm_hash_table_insert(ht, key1, value1);
+    CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+    int result = 0;
+    ioopm_hash_table_remove(ht, key1, &result);
+    CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+}
+
 int main()
 {
     // First we try to set up CUnit, and exit if we fail
@@ -455,13 +501,13 @@ int main()
 
         // Has key tests
         (CU_add_test(my_test_suite, "Test ht doesnt have nonexisting key.",
-            test_ht_has_nonexisting_key) == NULL) ||
+                     test_ht_has_nonexisting_key) == NULL) ||
         (CU_add_test(my_test_suite, "Test ht has existing key.",
-            test_ht_has_existing_key) == NULL) ||
+                     test_ht_has_existing_key) == NULL) ||
         (CU_add_test(my_test_suite, "Test ht has multiple keys.",
-            test_ht_has_multiple_keys) == NULL) ||
+                     test_ht_has_multiple_keys) == NULL) ||
         (CU_add_test(my_test_suite, "Test ht doesnt have removed key.",
-            test_ht_has_removed_key) == NULL) ||
+                     test_ht_has_removed_key) == NULL) ||
         (CU_add_test(my_test_suite, "Test ht doesnt have removed key but others remain.",
             test_ht_has_one_removed_two_remaining_keys) == NULL) ||
 
