@@ -7,6 +7,11 @@
 
 !makefile
 
+# gcov files
+*.gcda
+*.gcov
+*.gcno
+
 # Prerequisites
 *.d
 
