@@ -3,14 +3,26 @@
 #include <stdbool.h>
 #include <string.h>
 
+// Structs
+
 typedef struct entry entry_t;
 
-struct entry
+static struct entry
 {
     char *key;     // holds the key
     int value;     // holds the value
     entry_t *next; // points to the next entry (possibly NULL)
 };
+
+struct hash_table
+{
+    // DODGE: hard-coding number of buckets as 17.
+    // NOTE: addressing this dodge is optional.
+    entry_t buckets[17];
+};
+
+
+// Static (private) functions
 
 static entry_t *entry_create(char *key, int value, entry_t *next)
 {
@@ -26,13 +38,6 @@ static void entry_destroy(entry_t *entry)
     free(entry);
 }
 
-struct hash_table
-{
-    // DODGE: hard-coding number of buckets as 17.
-    // NOTE: addressing this dodge is optional.
-    entry_t buckets[17];
-};
-
 static size_t string_knr_hash(const char *str)
 {
     size_t result = 0;
@@ -43,6 +48,22 @@ static size_t string_knr_hash(const char *str)
     }
     return result;
 }
+
+static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
+{
+    size_t bucket = string_knr_hash(key) % 17;
+
+    // look for an entry with the key we want
+    entry_t *previous = &ht->buckets[bucket]; // Start as sentinel
+    while (previous->next != NULL && strcmp(previous->next->key, key) != 0)
+    {
+        previous = previous->next;
+    }
+
+    return previous;
+}
+
+// Public functions
 
 ioopm_hash_table_t *ioopm_hash_table_create(void)
 {
@@ -67,20 +88,6 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 
     free(ht);
     return;
-}
-
-static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
-{
-    size_t bucket = string_knr_hash(key) % 17;
-
-    // look for an entry with the key we want
-    entry_t *previous = &ht->buckets[bucket]; // Start as sentinel
-    while (previous->next != NULL && strcmp(previous->next->key, key) != 0)
-    {
-        previous = previous->next;
-    }
-
-    return previous;
 }
 
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value)
