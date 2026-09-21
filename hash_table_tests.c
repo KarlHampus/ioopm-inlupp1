@@ -223,24 +223,91 @@ void test_insert_already_existing_key_into_ht_with_values()
     ioopm_hash_table_destroy(ht);
 }
 
-void test_hash_table_has_nonexisting_key()
+void test_ht_has_nonexisting_key()
 {
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, "abc"));
+
+    ioopm_hash_table_destroy(ht);
 }
 
-void test_hash_table_has_existing_key()
+void test_ht_has_existing_key()
 {
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key = "abc";
+    int val = 92;
+    ioopm_hash_table_insert(ht, key, val);
+
+    CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key));
+
+    ioopm_hash_table_destroy(ht);
 }
 
-void test_hash_table_has_multiple_keys()
+void test_ht_has_multiple_keys()
 {
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "abc";
+    char *key2 = "abcd";
+    char *key3 = "abcde";
+    int val1 = 101;
+    int val2 = 202;
+    int val3 = 303;
+
+    ioopm_hash_table_insert(ht, key1, val1);
+    ioopm_hash_table_insert(ht, key2, val2);
+    ioopm_hash_table_insert(ht, key3, val3);
+
+    CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key1));
+    CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key2));
+    CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key3));
+
+    ioopm_hash_table_destroy(ht);
 }
 
-void test_hash_table_has_removed_key()
+void test_ht_has_removed_key()
 {
+
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key = "abc";
+    int val = 92;
+    ioopm_hash_table_insert(ht, key, val);
+
+    int result = 0;
+    ioopm_hash_table_remove(ht, key, &result);
+
+    CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key));
+
+    ioopm_hash_table_destroy(ht);
+
 }
 
-void test_hash_table_has_one_removed_two_remaining_keys()
+void test_ht_has_one_removed_two_remaining_keys()
 {
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "abc";
+    char *key2 = "abcd";
+    char *key3 = "abcde";
+    int val1 = 101;
+    int val2 = 202;
+    int val3 = 303;
+
+    ioopm_hash_table_insert(ht, key1, val1);
+    ioopm_hash_table_insert(ht, key2, val2);
+    ioopm_hash_table_insert(ht, key3, val3);
+
+    int result = 0;
+    ioopm_hash_table_remove(ht, key2, &result);
+
+    CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key1));
+    CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key2));
+    CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key3));
+
+    ioopm_hash_table_destroy(ht);
 }
 
 void test_hash_table_is_empty()
@@ -282,6 +349,18 @@ int main()
                      test_removing_one_entry_with_multiple_values_in_ht) == NULL) ||
         (CU_add_test(my_test_suite, "Test inserting same keys into ht with other exisiting elements.",
                      test_insert_already_existing_key_into_ht_with_values) == NULL) ||
+
+        // Has key tests
+        (CU_add_test(my_test_suite, "Test ht doesnt have nonexisting key.",
+            test_ht_has_nonexisting_key) == NULL) ||
+        (CU_add_test(my_test_suite, "Test ht has existing key.",
+            test_ht_has_existing_key) == NULL) ||
+        (CU_add_test(my_test_suite, "Test ht has multiple keys.",
+            test_ht_has_multiple_keys) == NULL) ||
+        (CU_add_test(my_test_suite, "Test ht doesnt have removed key.",
+            test_ht_has_removed_key) == NULL) ||
+        (CU_add_test(my_test_suite, "Test ht doesnt have removed key but others remain.",
+            test_ht_has_one_removed_two_remaining_keys) == NULL) ||
         0)
     {
         // If adding any of the tests fails, we tear down CUnit and exit
