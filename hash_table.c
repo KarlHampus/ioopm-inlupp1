@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#define No_Buckets 17
+
 // Structs
 
 typedef struct entry entry_t;
@@ -18,7 +20,7 @@ struct hash_table
 {
     // DODGE: hard-coding number of buckets as 17.
     // NOTE: addressing this dodge is optional.
-    entry_t buckets[17];
+    entry_t buckets[No_Buckets];
 };
 
 
@@ -51,7 +53,7 @@ static size_t string_knr_hash(const char *str)
 
 static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
 {
-    size_t bucket = string_knr_hash(key) % 17;
+    size_t bucket = string_knr_hash(key) % No_Buckets;
 
     // look for an entry with the key we want
     entry_t *previous = &ht->buckets[bucket]; // Start as sentinel
@@ -72,7 +74,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(void)
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
-    for (int i = 0; i < 17; i++) // Ändra 17 till rätt storlek sen
+    for (int i = 0; i < No_Buckets; i++) 
     {
         entry_t *current_bucket = ht->buckets[i].next;
 
