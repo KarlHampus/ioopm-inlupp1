@@ -85,7 +85,7 @@ static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
 
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value)
 {
-    entry_t *previous = find_previous_entry(ht, key); // find bucket
+    entry_t *previous = find_previous_entry(ht, key); // find bucket.
 
     // if the key exists, update the value, otherwise, add a new entry to the end of the list
     if (previous->next != NULL)
