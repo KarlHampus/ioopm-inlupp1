@@ -23,7 +23,6 @@ struct hash_table
     entry_t buckets[No_Buckets];
 };
 
-
 // Static (private) functions
 
 static entry_t *entry_create(char *key, int value, entry_t *next)
