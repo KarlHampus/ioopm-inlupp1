@@ -52,7 +52,6 @@ static size_t string_knr_hash(const char *str)
     return result;
 }
 
-
 static entry_t **find_previous_ptr(ioopm_hash_table_t *ht, char *key)
 {
     size_t bucket = string_knr_hash(key) % ht->bucket_size;
