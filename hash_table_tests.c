@@ -1,6 +1,7 @@
 #include <CUnit/Basic.h>
 #include "hash_table.h"
 #include <string.h>
+#include <stdlib.h>
 
 int init_suite(void)
 {
@@ -17,7 +18,7 @@ int clean_suite(void)
 }
 
 // Function for testing repeated insert and lookups easier
-static void test_insert(ioopm_hash_table_t *ht, char *key, int value)
+static void insert_and_assert_correct(ioopm_hash_table_t *ht, char *key, int value)
 {
     // Insert value 1 with key 2, should replace old value
     ioopm_hash_table_insert(ht, key, value);
@@ -29,6 +30,7 @@ static void test_insert(ioopm_hash_table_t *ht, char *key, int value)
 }
 
 // Test functions
+// Create and destroy
 void test_create_destroy()
 {
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -36,6 +38,7 @@ void test_create_destroy()
     ioopm_hash_table_destroy(ht);
 }
 
+// Lookup
 void test_lookup_on_empty_table()
 {
     // create new hash table
@@ -51,6 +54,112 @@ void test_lookup_on_empty_table()
     ioopm_hash_table_destroy(ht);
 }
 
+void test_lookup_on_singleton()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key = "abc";
+    int value = 123;
+
+    // insert key-value pair and check that the mapping exists
+    ioopm_hash_table_insert(ht, key, value);
+
+    // Check that lookup is successful and has correct value
+    int result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+    CU_ASSERT_EQUAL(result, value);
+
+    // destroy hash table
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_lookup_on_table_with_two_elements()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "abc";
+    char *key2 = "abcd";
+    int value1 = 123;
+    int value2 = 1234;
+
+    // insert key-value pair and check that the mapping exists
+    ioopm_hash_table_insert(ht, key1, value1);
+    ioopm_hash_table_insert(ht, key2, value2);
+
+    // Check that lookup is successful and has correct values
+    int result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key1, &result));
+    CU_ASSERT_EQUAL(result, value1);
+
+    result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key2, &result));
+    CU_ASSERT_EQUAL(result, value2);
+
+    // destroy hash table
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_lookup_of_wrong_key_on_table_with_elements()
+{
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key1 = "abc";
+    char *key2 = "abcd";
+    char *key3 = "abcde";
+    int value1 = 123;
+    int value2 = 1234;
+
+    // insert key-value pair and check that the mapping exists
+    ioopm_hash_table_insert(ht, key1, value1);
+    ioopm_hash_table_insert(ht, key2, value2);
+
+    // Check that lookup is successful and has correct values
+    int result = 0;
+    CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key3, &result));
+    CU_ASSERT_EQUAL(result, 0);
+
+    // destroy hash table
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_lookup_on_elements_in_same_bucket()
+{
+    // Creates a new hash_table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    // All of these keys hash to 4 with No_Buckets = 17
+    char *key1 = "Aa";
+    char *key2 = "BB";
+    char *key3 = "abcd";
+    int val1 = 1;
+    int val2 = 2;
+    int val3 = 3;
+
+    // Inserts the keys with the same hash to the same bucket
+    ioopm_hash_table_insert(ht, key1, val1);
+    ioopm_hash_table_insert(ht, key2, val2);
+    ioopm_hash_table_insert(ht, key3, val3);
+
+    // Check that lookup correctly looks up the correct value
+    int result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key1, &result));
+    CU_ASSERT_EQUAL(result, val1);
+
+    result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key2, &result));
+    CU_ASSERT_EQUAL(result, val2);
+
+    result = 0;
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key3, &result));
+    CU_ASSERT_EQUAL(result, val3);
+
+    // Destroy
+    ioopm_hash_table_destroy(ht);
+}
+
+
+
+// Insert
 void test_insert_once()
 {
     // create new hash table
@@ -62,13 +171,91 @@ void test_insert_once()
     // insert key-value pair and check that the mapping exists
     int result = 0;
     ioopm_hash_table_insert(ht, key, value);
-    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+
+    // Validate that the inserted value can be found and is correct
+    ioopm_hash_table_lookup(ht, key, &result);
     CU_ASSERT_EQUAL(result, value);
 
     // destroy hash table
     ioopm_hash_table_destroy(ht);
 }
 
+void test_insert_already_exisiting_key()
+{
+    // Creates a new hash_table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    // Initial key value pairs
+    char *key = "abc";
+    int value = 123;
+    int value2 = 321;
+
+    // Testing insert and change value of key 1
+    ioopm_hash_table_insert(ht, key, value);
+    insert_and_assert_correct(ht, key, value2);
+
+    // Destroy the hash_table
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_insert_already_existing_key_into_ht_with_values()
+{
+    // Creates a new hash_table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char *key = "abc";
+    char *key2 = "abcd";
+    char *key3 = ""; // Empty string, should be possible :)
+    int value = 123;
+    int value2 = 321;
+    int value3 = 1;
+
+    ioopm_hash_table_insert(ht, key, value);
+
+    // Testing insert and change value of key 2
+    ioopm_hash_table_insert(ht, key2, value2);
+    insert_and_assert_correct(ht, key2, value);
+
+    // Testing insert and change value of key 3
+    ioopm_hash_table_insert(ht, key3, value3);
+    insert_and_assert_correct(ht, key3, value);
+
+    // Testing insert and change value of key 1 after key 2 and 3 are in ht
+    insert_and_assert_correct(ht, key, value3);
+
+    ioopm_hash_table_destroy(ht);
+}
+
+void test_insert_two_elements_with_same_key_adress_different_values()
+{
+    // Creates a new hash_table
+    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+    char key[2] = "a";
+    char *initial_key = strdup(key);
+    int value = 123;
+    int value2 = 321;
+
+    // Insert
+    ioopm_hash_table_insert(ht, key, value);
+    key[0] = 'b';
+    ioopm_hash_table_insert(ht, key, value2);
+
+    // Check if correct
+    int result = 0;
+    ioopm_hash_table_lookup(ht, initial_key, &result);
+    CU_ASSERT_EQUAL(result, value);
+
+    result = 0;
+    ioopm_hash_table_lookup(ht, key, &result);
+    CU_ASSERT_EQUAL(result, value2);
+
+    // Destroy
+    free(initial_key);
+    ioopm_hash_table_destroy(ht);
+}
+
+// Remove
 void test_remove_entry_empty_ht()
 {
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -178,52 +365,7 @@ void test_removing_from_same_bucket()
     ioopm_hash_table_destroy(ht);
 }
 
-void test_insert_already_exisiting_key()
-{
-    // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create();
-
-    // Initial key value pairs
-    char *key = "abc";
-    int value = 123;
-    int value2 = 321;
-
-    // Testing insert and change value of key 1
-    ioopm_hash_table_insert(ht, key, value);
-    test_insert(ht, key, value2);
-
-    // Destroy the hash_table
-    ioopm_hash_table_destroy(ht);
-}
-
-void test_insert_already_existing_key_into_ht_with_values()
-{
-    // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create();
-
-    char *key = "abc";
-    char *key2 = "abcd";
-    char *key3 = ""; // Empty string, should be possible :)
-    int value = 123;
-    int value2 = 321;
-    int value3 = 1;
-
-    ioopm_hash_table_insert(ht, key, value);
-
-    // Testing insert and change value of key 2
-    ioopm_hash_table_insert(ht, key2, value2);
-    test_insert(ht, key2, value);
-
-    // Testing insert and change value of key 3
-    ioopm_hash_table_insert(ht, key3, value3);
-    test_insert(ht, key3, value);
-
-    // Testing insert and change value of key 1 after key 2 and 3 are in ht
-    test_insert(ht, key, value3);
-
-    ioopm_hash_table_destroy(ht);
-}
-
+// Has key
 void test_ht_has_nonexisting_key()
 {
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -310,6 +452,7 @@ void test_ht_has_one_removed_two_remaining_keys()
     ioopm_hash_table_destroy(ht);
 }
 
+// Size
 void test_size_of_empty_ht()
 {
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -414,16 +557,13 @@ void test_size_of_ht_after_many_inserts()
     ioopm_hash_table_destroy(ht);
 }
 
-void test_hash_table_is_empty()
-{
-    ioopm_hash_table_t *ht = ioopm_hash_table_create();
-    CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
-}
-
+// Is empty
 void test_empty_hash_table_is_empty()
 {
     ioopm_hash_table_t *ht = ioopm_hash_table_create();
     CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+
+    ioopm_hash_table_destroy(ht);
 }
 
 void test_singleton_hash_table_is_not_empty()
@@ -435,6 +575,8 @@ void test_singleton_hash_table_is_not_empty()
 
     ioopm_hash_table_insert(ht, key1, value1);
     CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+
+    ioopm_hash_table_destroy(ht);
 }
 
 void test_larger_hash_table_is_not_empty()
@@ -452,6 +594,8 @@ void test_larger_hash_table_is_not_empty()
     ioopm_hash_table_insert(ht, key2, value2);
     ioopm_hash_table_insert(ht, key3, value3);
     CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+
+    ioopm_hash_table_destroy(ht);
 }
 
 void test_hash_table_insert_then_remove_is_empty()
@@ -463,11 +607,15 @@ void test_hash_table_insert_then_remove_is_empty()
 
     ioopm_hash_table_insert(ht, key1, value1);
     CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+
     int result = 0;
     ioopm_hash_table_remove(ht, key1, &result);
     CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+
+    ioopm_hash_table_destroy(ht);
 }
 
+// Main
 int main()
 {
     // First we try to set up CUnit, and exit if we fail
@@ -490,17 +638,42 @@ int main()
     // the test in question. If you want to add another test, just
     // copy a line below and change the information
     if (
-        (CU_add_test(my_test_suite, "Test creating and destroying a hash table.", test_create_destroy) == NULL) ||
-        (CU_add_test(my_test_suite, "Test lookup on empty ht.", test_lookup_on_empty_table) == NULL) ||
-        (CU_add_test(my_test_suite, "Test insert and lookup functionality.", test_insert_once) == NULL) ||
-        (CU_add_test(my_test_suite, "Test insert on already exisiting key.", test_insert_already_exisiting_key) == NULL) ||
-        (CU_add_test(my_test_suite, "Test removing entries from empty ht.", test_remove_entry_empty_ht) == NULL) ||
-        (CU_add_test(my_test_suite, "Test removing one entry.", test_remove_one_entry) == NULL) ||
-        (CU_add_test(my_test_suite, "Test removing from same bucket.", test_removing_from_same_bucket) == NULL) ||
+        // Create and destroy test
+        (CU_add_test(my_test_suite, "Test creating and destroying a hash table.",
+                     test_create_destroy) == NULL) ||
+
+        // Lookup tests
+        (CU_add_test(my_test_suite, "Test lookup on empty ht.",
+                     test_lookup_on_empty_table) == NULL) ||
+        (CU_add_test(my_test_suite, "Test lookup on singleton.",
+                     test_lookup_on_singleton) == NULL) ||
+        (CU_add_test(my_test_suite, "Test lookup on table with two elements.",
+                     test_lookup_on_table_with_two_elements) == NULL) ||
+        (CU_add_test(my_test_suite, "Test lookup of wrong key on table with elements.",
+                     test_lookup_of_wrong_key_on_table_with_elements) == NULL) ||
+        (CU_add_test(my_test_suite, "Test lookup on elements in same bucket.",
+                     test_lookup_on_elements_in_same_bucket) == NULL) ||
+
+        // Insert tests
+        (CU_add_test(my_test_suite, "Test insert and lookup functionality.",
+                     test_insert_once) == NULL) ||
+        (CU_add_test(my_test_suite, "Test insert on already exisiting key.",
+                     test_insert_already_exisiting_key) == NULL) ||
+        (CU_add_test(my_test_suite, "Test insert same keys into ht with other exisiting elements.",
+                     test_insert_already_existing_key_into_ht_with_values) == NULL) ||
+        (CU_add_test(my_test_suite, "Test insert with same pointer but different values.",
+                     test_insert_two_elements_with_same_key_adress_different_values) == NULL) ||
+
+
+        // Remove tests
+        (CU_add_test(my_test_suite, "Test removing entries from empty ht.",
+                     test_remove_entry_empty_ht) == NULL) ||
+        (CU_add_test(my_test_suite, "Test removing one entry.",
+                     test_remove_one_entry) == NULL) ||
+        (CU_add_test(my_test_suite, "Test removing from same bucket.",
+                     test_removing_from_same_bucket) == NULL) ||
         (CU_add_test(my_test_suite, "Test removing multiple values from ht with multiple values.",
                      test_removing_one_entry_with_multiple_values_in_ht) == NULL) ||
-        (CU_add_test(my_test_suite, "Test inserting same keys into ht with other exisiting elements.",
-                     test_insert_already_existing_key_into_ht_with_values) == NULL) ||
 
         // Has key tests
         (CU_add_test(my_test_suite, "Test ht doesnt have nonexisting key.",
@@ -529,6 +702,16 @@ int main()
                      test_size_of_ht_after_remove_of_last_element) == NULL) ||
         (CU_add_test(my_test_suite, "Test size of ht after many inserts.",
                      test_size_of_ht_after_many_inserts) == NULL) ||
+
+        // Size tests
+        (CU_add_test(my_test_suite, "Test empty ht is empty.",
+                     test_empty_hash_table_is_empty) == NULL) ||
+        (CU_add_test(my_test_suite, "Test singleton ht is not empty.",
+                     test_singleton_hash_table_is_not_empty) == NULL) ||
+        (CU_add_test(my_test_suite, "Test larger ht is not empty.",
+                     test_larger_hash_table_is_not_empty) == NULL) ||
+        (CU_add_test(my_test_suite, "Test ht is empty after insert then remove.",
+                     test_hash_table_insert_then_remove_is_empty) == NULL) ||
         0)
     {
         // If adding any of the tests fails, we tear down CUnit and exit
