@@ -730,7 +730,7 @@ int main()
         (CU_add_test(my_test_suite, "[Size] after many inserts.",
                      test_size_of_ht_after_many_inserts) == NULL) ||
 
-        // Size tests
+        // Is empty tests
         (CU_add_test(my_test_suite, "[Is Empty] empty.",
                      test_empty_hash_table_is_empty) == NULL) ||
         (CU_add_test(my_test_suite, "[Is Empty] singleton not empty.",
