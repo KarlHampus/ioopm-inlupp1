@@ -17,7 +17,7 @@ typedef struct hash_table ioopm_hash_table_t;
 
 /// @brief Create a new hash table
 /// @return A new empty hash table
-ioopm_hash_table_t *ioopm_hash_table_create(void);
+ioopm_hash_table_t *ioopm_hash_table_create(unsigned int bucket_size);
 
 /// @brief Delete a hash table and free its memory
 /// @param ht a hash table to be deleted

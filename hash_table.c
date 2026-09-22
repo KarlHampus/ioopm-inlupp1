@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <assert.h>
 
 #define No_Buckets 17
 
@@ -18,10 +19,9 @@ struct entry
 
 struct hash_table
 {
-    // DODGE: hard-coding number of buckets as 17.
-    // NOTE: addressing this dodge is optional.
+    unsigned int bucket_size;
     unsigned int size;
-    entry_t buckets[No_Buckets];
+    entry_t *buckets;
 };
 
 // Static (private) functions
@@ -54,7 +54,7 @@ static size_t string_knr_hash(const char *str)
 
 static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
 {
-    size_t bucket = string_knr_hash(key) % No_Buckets;
+    size_t bucket = string_knr_hash(key) % ht->bucket_size;
 
     // look for an entry with the key we want
     entry_t *previous = &ht->buckets[bucket]; // Start as sentinel
@@ -68,16 +68,20 @@ static entry_t *find_previous_entry(ioopm_hash_table_t *ht, char *key)
 
 // Public functions
 
-ioopm_hash_table_t *ioopm_hash_table_create(void)
+ioopm_hash_table_t *ioopm_hash_table_create(unsigned int bucket_size)
 {
+    assert(bucket_size > 0);
+
     ioopm_hash_table_t *ht = calloc(1, sizeof(ioopm_hash_table_t));
+    ht->buckets = calloc(bucket_size, sizeof(entry_t));
     ht->size = 0;
+    ht->bucket_size = bucket_size;
     return ht;
 }
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
-    for (int i = 0; i < No_Buckets; i++)
+    for (unsigned int i = 0; i < ht->bucket_size; i++)
     {
         entry_t *current_bucket = ht->buckets[i].next;
 
@@ -91,6 +95,7 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
         }
     }
 
+    free(ht->buckets);
     free(ht);
     return;
 }
