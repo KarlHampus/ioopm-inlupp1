@@ -1,0 +1,1 @@
+Alla filer i .vscode är genererade av Claude.
