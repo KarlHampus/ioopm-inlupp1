@@ -107,13 +107,13 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value)
     entry_t **previous = find_previous_ptr(ht, key); // find bucket.
 
     // if the key exists, update the value, otherwise, add a new entry to the end of the list
-    if ((*previous) != NULL)
+    if (*previous != NULL)
     {
         (*previous)->value = value;
     }
     else
     {
-        (*previous) = entry_create(key, value, NULL);
+        *previous = entry_create(key, value, NULL);
         ht->size++;
     }
 }
@@ -126,7 +126,7 @@ bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result)
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
     if ((*previous) != NULL)
     {
-        entry_t *to_remove = (*previous);
+        entry_t *to_remove = *previous;
 
         // relink
         *previous = to_remove->next;
@@ -151,7 +151,7 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result)
     entry_t **previous = find_previous_ptr(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
-    if ((*previous) != NULL)
+    if (*previous != NULL)
     {
         *result = (*previous)->value;
         return true;
@@ -166,7 +166,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key)
 {
     // look for an entry with the key we want
     entry_t **previous = find_previous_ptr(ht, key);
-    return (*previous) != NULL; // Key exists.
+    return *previous != NULL; // Key exists.
 }
 
 bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht)
