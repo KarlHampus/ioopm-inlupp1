@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 #define No_Buckets 17
 
@@ -21,7 +22,7 @@ struct hash_table
 {
     unsigned int bucket_size;
     unsigned int size;
-    entry_t *buckets;
+    entry_t **buckets;
 };
 
 // Static (private) functions
@@ -57,12 +58,11 @@ static entry_t **find_previous_ptr(ioopm_hash_table_t *ht, char *key)
     size_t bucket = string_knr_hash(key) % ht->bucket_size;
 
     // look for an entry with the key we want
-    entry_t *prev_entry = &ht->buckets[bucket];
-    entry_t **previous = &prev_entry;
+    entry_t **previous = &ht->buckets[bucket];
 
-    while ((*previous)->next != NULL && strcmp((*previous)->next->key, key) != 0)
+    while (*previous != NULL && strcmp((*previous)->key, key) != 0)
     {
-        *previous = (*previous)->next;
+        previous = &(*previous)->next;
     }
 
     return previous;
@@ -75,7 +75,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(unsigned int bucket_size)
     assert(bucket_size > 0);
 
     ioopm_hash_table_t *ht = calloc(1, sizeof(ioopm_hash_table_t));
-    ht->buckets = calloc(bucket_size, sizeof(entry_t));
+    ht->buckets = calloc(bucket_size, sizeof(entry_t *));
     ht->size = 0;
     ht->bucket_size = bucket_size;
     return ht;
@@ -85,7 +85,7 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
     for (unsigned int i = 0; i < ht->bucket_size; i++)
     {
-        entry_t *current_bucket = ht->buckets[i].next;
+        entry_t *current_bucket = ht->buckets[i];
 
         while (current_bucket != NULL)
         {
@@ -107,13 +107,13 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value)
     entry_t **previous = find_previous_ptr(ht, key); // find bucket.
 
     // if the key exists, update the value, otherwise, add a new entry to the end of the list
-    if ((*previous)->next != NULL)
+    if ((*previous) != NULL)
     {
-        (*previous)->next->value = value;
+        (*previous)->value = value;
     }
     else
     {
-        (*previous)->next = entry_create(key, value, NULL);
+        (*previous) = entry_create(key, value, NULL);
         ht->size++;
     }
 }
@@ -124,12 +124,12 @@ bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result)
     entry_t **previous = find_previous_ptr(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
-    if ((*previous)->next != NULL)
+    if ((*previous) != NULL)
     {
-        entry_t *to_remove = (*previous)->next;
+        entry_t *to_remove = (*previous);
 
         // relink
-        (*previous)->next = to_remove->next;
+        previous = &to_remove->next;
 
         // Save removed value
         *result = to_remove->value;
@@ -151,9 +151,9 @@ bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result)
     entry_t **previous = find_previous_ptr(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
-    if ((*previous)->next != NULL)
+    if ((*previous) != NULL)
     {
-        *result = (*previous)->next->value;
+        *result = (*previous)->value;
         return true;
     }
     else
@@ -166,7 +166,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key)
 {
     // look for an entry with the key we want
     entry_t **previous = find_previous_ptr(ht, key);
-    return (*previous)->next != NULL; // Key exists.
+    return (*previous) != NULL; // Key exists.
 }
 
 bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht)
