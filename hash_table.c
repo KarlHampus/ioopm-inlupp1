@@ -129,7 +129,7 @@ bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key, int *result)
         entry_t *to_remove = (*previous);
 
         // relink
-        previous = &to_remove->next;
+        *previous = to_remove->next;
 
         // Save removed value
         *result = to_remove->value;
