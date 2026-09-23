@@ -3,9 +3,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
-#include <stdio.h>
-
-#define No_Buckets 17
 
 // Structs
 
