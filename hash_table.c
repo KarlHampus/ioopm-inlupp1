@@ -1,26 +1,9 @@
 #include "hash_table.h"
+#include "hash_table_structs.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
-
-// Structs
-
-typedef struct entry entry_t;
-
-struct entry
-{
-    char *key;     // holds the key
-    int value;     // holds the value
-    entry_t *next; // points to the next entry (possibly NULL)
-};
-
-struct hash_table
-{
-    unsigned int bucket_size;
-    unsigned int size;
-    entry_t **buckets;
-};
 
 // Static (private) functions
 
