@@ -31,9 +31,10 @@ hash_table.o: hash_table.c hash_table.h hash_table_structs.h
 
 clean:
 	rm -f *.o
-	rm -f hash_table_tests hash_table_iterator_tests
+	rm -f hash_table_tests hash_table_iterator_tests linked_list_tests
+	rm -f *.gcda *.gcno
 
-test:
+test: hash_table_tests hash_table_iterator_tests linked_list_tests
 	./$(TESTFILE)
 
 memtest: $(TESTFILE)
