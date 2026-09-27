@@ -1,3 +1,5 @@
+vgcore.*
+
 # ignore everything...
 *
 # except directories (needed, or git won't descend into them)
