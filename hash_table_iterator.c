@@ -1,3 +1,5 @@
+#include <math.h>
+#include <assert.h>
 #include "hash_table_iterator.h"
 #include "hash_table_structs.h"
 #include "hash_table.h"
@@ -13,6 +15,8 @@ struct hash_table_iterator
 };
 
 // Public functions
+
+int min(int x, int y) { return x < y ? x : y; }
 
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht)
 {
@@ -32,36 +36,40 @@ ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t
 
 void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it)
 {
-    // Todo: stub
-    (void) it;
+    free(it);
 }
 
 bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it)
 {
-    // Todo: stub
-    (void) it;
-
-    return false;
+    bool at_last_bucket = it->current_bucket >= it->ht->bucket_size - 1;
+    return it->current_entry == NULL && at_last_bucket;
 }
 
 void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it)
 {
-    // Todo: stub
-    (void) it;
+    assert(!ioopm_hash_table_iterator_at_end(it) && "Iterator at end when advancing.");
+    bool at_last_bucket;
+
+    do
+    {
+        it->current_entry = it->current_entry->next;
+        if (it->current_entry == NULL)
+        {
+            // Increase bucket, but never past the bucket size.
+            it->current_bucket = min(it->current_bucket + 1, it->ht->bucket_size - 1);
+            it->current_entry = it->ht->buckets[it->current_bucket];
+        }
+
+        at_last_bucket = it->current_bucket >= it->ht->bucket_size - 1;
+    } while (it->current_entry == NULL && !at_last_bucket);
 }
 
 char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it)
 {
-    // Todo: stub
-    (void) it;
-
-    return "SOMETHING IS WRONG :DDDDDDD";
+    return it->current_entry->key;
 }
 
 int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it)
 {
-    // Todo: stub
-    (void) it;
-
-    return -1;
+    return it->current_entry->value;
 }

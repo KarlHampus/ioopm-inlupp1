@@ -5,7 +5,7 @@
       "name": "Debug C with make and gdb",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${fileDirname}/hash_table_tests",
+      "program": "${fileDirname}/${fileBasenameNoExtension}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
