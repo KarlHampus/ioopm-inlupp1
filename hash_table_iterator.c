@@ -16,8 +16,6 @@ struct hash_table_iterator
 
 // Public functions
 
-int min(int x, int y) { return x < y ? x : y; }
-
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht)
 {
     ioopm_hash_table_iterator_t *it = calloc(1, sizeof(ioopm_hash_table_iterator_t));
@@ -25,7 +23,7 @@ ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t
     it->current_bucket = 0;
     it->current_entry = ht->buckets[0];
 
-    while (it->current_entry == NULL && it->current_bucket < it->ht->bucket_size)
+    while (it->current_entry == NULL && it->current_bucket < it->ht->bucket_size - 1)
     {
         it->current_bucket++;
         it->current_entry = it->ht->buckets[it->current_bucket];
@@ -48,20 +46,19 @@ bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it)
 void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it)
 {
     assert(!ioopm_hash_table_iterator_at_end(it) && "Iterator at end when advancing.");
-    bool at_last_bucket;
+    bool at_last_bucket = it->current_bucket >= it->ht->bucket_size - 1;
+    // Advance
+    it->current_entry = it->current_entry->next;
 
-    do
+    while (it->current_entry == NULL && !at_last_bucket)
     {
-        it->current_entry = it->current_entry->next;
-        if (it->current_entry == NULL)
-        {
-            // Increase bucket, but never past the bucket size.
-            it->current_bucket = min(it->current_bucket + 1, it->ht->bucket_size - 1);
-            it->current_entry = it->ht->buckets[it->current_bucket];
-        }
+
+        // Increase bucket, but never past the bucket size.
+        it->current_bucket++;
+        it->current_entry = it->ht->buckets[it->current_bucket];
 
         at_last_bucket = it->current_bucket >= it->ht->bucket_size - 1;
-    } while (it->current_entry == NULL && !at_last_bucket);
+    };
 }
 
 char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it)

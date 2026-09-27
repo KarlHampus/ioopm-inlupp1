@@ -27,7 +27,7 @@ clean:
 test:
 	./$(TESTFILE)
 
-memtest:
+memtest: $(TESTFILE)
 	valgrind --leak-check=full ./$(TESTFILE)
 
 .PHONY: test clean memtest all

@@ -74,7 +74,7 @@ void test_iterating_ht_multiple_values()
 	int safety_line = 10;
 	while (!ioopm_hash_table_iterator_at_end(it) && safety_line > 0)
 	{
-		// Advance iterator and decrease safety line
+		// Advance iterator and decrease safety line.
 		ioopm_hash_table_iterator_advance(it);
 		safety_line--;
 	}
@@ -175,7 +175,6 @@ void test_iterating_elements_in_same_bucket()
 	ioopm_hash_table_destroy(ht_control);
 }
 
-
 int main()
 {
 	// First we try to set up CUnit, and exit if we fail
@@ -201,9 +200,9 @@ int main()
 		(CU_add_test(my_test_suite, "[Iteration] Empty table.", test_iterating_empty_table) == NULL) ||
 		(CU_add_test(my_test_suite, "[Iteration] Singleton.", test_iterating_singleton_ht) == NULL) ||
 		(CU_add_test(my_test_suite, "[Iteration] Multiple elements in ht.", test_iterating_ht_multiple_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Iteration] Each key value pair is visited exactly once.", 
+		(CU_add_test(my_test_suite, "[Iteration] Each key value pair is visited exactly once.",
 					 test_every_key_value_pair_visited_exactly_once) == NULL) ||
-		(CU_add_test(my_test_suite, "[Iteration] Iterating key value pair in same bucket.", 
+		(CU_add_test(my_test_suite, "[Iteration] Iterating key value pair in same bucket.",
 					 test_iterating_elements_in_same_bucket) == NULL) ||
 		0)
 	{
