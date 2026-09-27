@@ -57,22 +57,13 @@ void test_iterating_ht_multiple_values()
 {
 	ioopm_hash_table_t *ht = ioopm_hash_table_create(17);
 
-	char *key1 = "aa";
-	char *key2 = "ab";
-	char *key3 = "ac";
-	char *key4 = "ax";
-	char *key5 = "ah";
-	int val1 = 1;
-	int val2 = 2;
-	int val3 = 3;
-	int val4 = 4;
-	int val5 = 5;
+	char *keys[5] = {"aa", "ab", "ac", "xh", "psldkoejdob"};
+	int values[5] = {1, 2, 3, 4, 5};
 
-	ioopm_hash_table_insert(ht, key1, val1);
-	ioopm_hash_table_insert(ht, key2, val2);
-	ioopm_hash_table_insert(ht, key3, val3);
-	ioopm_hash_table_insert(ht, key4, val4);
-	ioopm_hash_table_insert(ht, key5, val5);
+	for (int i = 0; i < 5; i++)
+	{
+		ioopm_hash_table_insert(ht, keys[i], values[i]);
+	}
 
 	// Create iterator
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
@@ -101,29 +92,14 @@ void test_every_key_value_pair_visited_exactly_once()
 	ioopm_hash_table_t *ht = ioopm_hash_table_create(17);
 	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17);
 
-	char *key1 = "aa";
-	char *key2 = "ab";
-	char *key3 = "ac";
-	char *key4 = "ax";
-	char *key5 = "ah";
-	int val1 = 1;
-	int val2 = 2;
-	int val3 = 3;
-	int val4 = 4;
-	int val5 = 5;
+	char *keys[5] = {"aa", "ab", "ac", "xh", "psldkoejdob"};
+	int values[5] = {1, 2, 3, 4, 5};
 
-	ioopm_hash_table_insert(ht, key1, val1);
-	ioopm_hash_table_insert(ht, key2, val2);
-	ioopm_hash_table_insert(ht, key3, val3);
-	ioopm_hash_table_insert(ht, key4, val4);
-	ioopm_hash_table_insert(ht, key5, val5);
-
-	// Hash table to check that values have been visited
-	ioopm_hash_table_insert(ht_control, key1, val1);
-	ioopm_hash_table_insert(ht_control, key2, val2);
-	ioopm_hash_table_insert(ht_control, key3, val3);
-	ioopm_hash_table_insert(ht_control, key4, val4);
-	ioopm_hash_table_insert(ht_control, key5, val5);
+	for (int i = 0; i < 5; i++)
+	{
+		ioopm_hash_table_insert(ht, keys[i], values[i]);
+		ioopm_hash_table_insert(ht_control, keys[i], values[i]);
+	}
 
 	// Create iterator
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
@@ -161,29 +137,14 @@ void test_iterating_elements_in_same_bucket()
 	ioopm_hash_table_t *ht = ioopm_hash_table_create(2);
 	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17);
 
-	char *key1 = "aa";
-	char *key2 = "ab";
-	char *key3 = "ac";
-	char *key4 = "ax";
-	char *key5 = "ah";
-	int val1 = 1;
-	int val2 = 2;
-	int val3 = 3;
-	int val4 = 4;
-	int val5 = 5;
+	char *keys[5] = {"aa", "ab", "ac", "xh", "psldkoejdob"};
+	int values[5] = {1, 2, 3, 4, 5};
 
-	ioopm_hash_table_insert(ht, key1, val1);
-	ioopm_hash_table_insert(ht, key2, val2);
-	ioopm_hash_table_insert(ht, key3, val3);
-	ioopm_hash_table_insert(ht, key4, val4);
-	ioopm_hash_table_insert(ht, key5, val5);
-
-	// Hash table to check that values have been visited
-	ioopm_hash_table_insert(ht_control, key1, val1);
-	ioopm_hash_table_insert(ht_control, key2, val2);
-	ioopm_hash_table_insert(ht_control, key3, val3);
-	ioopm_hash_table_insert(ht_control, key4, val4);
-	ioopm_hash_table_insert(ht_control, key5, val5);
+	for (int i = 0; i < 5; i++)
+	{
+		ioopm_hash_table_insert(ht, keys[i], values[i]);
+		ioopm_hash_table_insert(ht_control, keys[i], values[i]);
+	}
 
 	// Create iterator
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
