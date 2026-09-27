@@ -2,11 +2,14 @@ CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic 
 TESTFILE=hash_table_iterator_tests
 
-all: hash_table_iterator_tests
-	./$(TESTFILE)
+all: hash_table_iterator_tests freq_count hash_table_tests
+# 	./$(TESTFILE)
 
 %.o: %.c %.h
 	$(CC) $(FLAGS) $< -c
+
+freq_count: freq_count.c hash_table.o hash_table_iterator.o
+	$(CC) $(FLAGS) $^ -o $@
 
 hash_table_iterator_tests: hash_table_iterator_tests.c hash_table_iterator.o hash_table.o
 	$(CC) $(FLAGS) $^ -o $@ -lcunit
