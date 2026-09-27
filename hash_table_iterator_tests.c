@@ -18,12 +18,6 @@ int clean_suite(void)
 	return 0;
 }
 
-// Test functions
-void test_nothing()
-{
-	CU_ASSERT_TRUE(true);
-}
-
 // General tests
 
 // Iterating over an empty hash table
@@ -60,6 +54,49 @@ void test_iterating_singleton_ht()
 
 // Iterating over a hash table with several entries
 void test_iterating_ht_multiple_values()
+{
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(17);
+
+	char *key1 = "aa";
+	char *key2 = "ab";
+	char *key3 = "ac";
+	char *key4 = "ax";
+	char *key5 = "ah";
+	int val1 = 1;
+	int val2 = 2;
+	int val3 = 3;
+	int val4 = 4;
+	int val5 = 5;
+
+	ioopm_hash_table_insert(ht, key1, val1);
+	ioopm_hash_table_insert(ht, key2, val2);
+	ioopm_hash_table_insert(ht, key3, val3);
+	ioopm_hash_table_insert(ht, key4, val4);
+	ioopm_hash_table_insert(ht, key5, val5);
+
+	// Create iterator
+	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
+
+	// Adding to avoid infinite loops in case advance does not work.
+	// Having it at 10 lets us also check that when the looping is finished
+	// its the same size as the hash table.
+	int safety_line = 10;
+	while (!ioopm_hash_table_iterator_at_end(it) && safety_line > 0)
+	{
+		// Advance iterator and decrease safety line
+		ioopm_hash_table_iterator_advance(it);
+		safety_line--;
+	}
+
+	// It should have looped 5 times so both should be at 5.
+	CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), safety_line);
+
+	ioopm_hash_table_iterator_destroy(it);
+	ioopm_hash_table_destroy(ht);
+}
+
+// Making sure that every inserted key-value pair is visited exactly once
+void test_every_key_value_pair_visited_exactly_once()
 {
 	ioopm_hash_table_t *ht = ioopm_hash_table_create(17);
 	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17);
@@ -117,8 +154,66 @@ void test_iterating_ht_multiple_values()
 	ioopm_hash_table_destroy(ht_control);
 }
 
-// Making sure that every inserted key-value pair is visited exactly once
 // Iterating over a hash table with several entries in the same bucket
+void test_iterating_elements_in_same_bucket()
+{
+	// Creating a hashtable of size 2, many elements will be in the same bucket.
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2);
+	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17);
+
+	char *key1 = "aa";
+	char *key2 = "ab";
+	char *key3 = "ac";
+	char *key4 = "ax";
+	char *key5 = "ah";
+	int val1 = 1;
+	int val2 = 2;
+	int val3 = 3;
+	int val4 = 4;
+	int val5 = 5;
+
+	ioopm_hash_table_insert(ht, key1, val1);
+	ioopm_hash_table_insert(ht, key2, val2);
+	ioopm_hash_table_insert(ht, key3, val3);
+	ioopm_hash_table_insert(ht, key4, val4);
+	ioopm_hash_table_insert(ht, key5, val5);
+
+	// Hash table to check that values have been visited
+	ioopm_hash_table_insert(ht_control, key1, val1);
+	ioopm_hash_table_insert(ht_control, key2, val2);
+	ioopm_hash_table_insert(ht_control, key3, val3);
+	ioopm_hash_table_insert(ht_control, key4, val4);
+	ioopm_hash_table_insert(ht_control, key5, val5);
+
+	// Create iterator
+	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
+
+	// Adding to avoid infinite loops in case advance does not work
+	int safety_line = 10;
+	while (!ioopm_hash_table_iterator_at_end(it) && safety_line > 0)
+	{
+		char *cur_key = ioopm_hash_table_iterator_current_key(it);
+
+		// Check that the control table has the same key
+		CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht_control, cur_key));
+
+		// Remove the key from the control table to ensure there are
+		// no dups in the future checks
+		int result = 0;
+		ioopm_hash_table_remove(ht_control, cur_key, &result);
+
+		// Advance iterator and decrease safety line
+		ioopm_hash_table_iterator_advance(it);
+		safety_line--;
+	}
+
+	CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht_control));
+
+	ioopm_hash_table_iterator_destroy(it);
+	ioopm_hash_table_destroy(ht);
+	ioopm_hash_table_destroy(ht_control);
+}
+
 
 int main()
 {
@@ -142,10 +237,13 @@ int main()
 	// the test in question. If you want to add another test, just
 	// copy a line below and change the information
 	if (
-		(CU_add_test(my_test_suite, "[Nothing] True is true..", test_nothing) == NULL) ||
 		(CU_add_test(my_test_suite, "[Iteration] Empty table.", test_iterating_empty_table) == NULL) ||
 		(CU_add_test(my_test_suite, "[Iteration] Singleton.", test_iterating_singleton_ht) == NULL) ||
 		(CU_add_test(my_test_suite, "[Iteration] Multiple elements in ht.", test_iterating_ht_multiple_values) == NULL) ||
+		(CU_add_test(my_test_suite, "[Iteration] Each key value pair is visited exactly once.", 
+					 test_every_key_value_pair_visited_exactly_once) == NULL) ||
+		(CU_add_test(my_test_suite, "[Iteration] Iterating key value pair in same bucket.", 
+					 test_iterating_elements_in_same_bucket) == NULL) ||
 		0)
 	{
 		// If adding any of the tests fails, we tear down CUnit and exit
