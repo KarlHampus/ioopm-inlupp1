@@ -93,7 +93,6 @@ static link_t **find_previous_link(link_t **start, size_t index)
 }
 
 void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
-void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
 {
     assert(list->size >= index);
 
