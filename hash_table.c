@@ -11,7 +11,7 @@
 static entry_t *entry_create(char *key, int value, entry_t *next)
 {
     entry_t *new = malloc(sizeof(entry_t));
-    new->key = strdup(key);
+    new->key = strdup(key); // Maybe move strdup to insert
     new->value = value;
     new->next = next;
     return new;
