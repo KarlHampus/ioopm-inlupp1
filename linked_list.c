@@ -121,7 +121,7 @@ static elem_t remove_last(ioopm_list_t *list)
     {
         elem_t result = list->first->elem;
 
-        link_destroy(list->first->elem);
+        link_destroy(list->first);
 
         list->first = NULL;
         list->last = NULL;
