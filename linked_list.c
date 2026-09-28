@@ -86,11 +86,11 @@ elem_t ioopm_list_last(ioopm_list_t *list)
 
 // Function get pointer to link
 
-static link_t **find_previous_link(link_t **start, size_t index)
+static link_t **find_link_pointer(link_t **start, size_t index)
 {
     if (*start == NULL || index == 0)
         return start;
-    return find_previous_link(&(*start)->next, index - 1);
+    return find_link_pointer(&(*start)->next, index - 1);
 }
 
 void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
@@ -107,7 +107,7 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
     }
     else
     {
-        link_t **prev_link = find_previous_link(&list->first, index);
+        link_t **prev_link = find_link_pointer(&list->first, index);
 
         link_t *link_to_move = *prev_link;
         link_t *link_to_insert = link_create(elem, link_to_move);
@@ -133,7 +133,7 @@ static elem_t remove_last(ioopm_list_t *list)
         return result;
     }
 
-    link_t **ptr_to_prev_link_ptr = find_previous_link(&list->first, list->size - 2);
+    link_t **ptr_to_prev_link_ptr = find_link_pointer(&list->first, list->size - 2);
     link_t *to_remove = (*ptr_to_prev_link_ptr)->next;
 
     elem_t result = to_remove->elem;
@@ -152,7 +152,7 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
     if (index == list->size - 1)
         return remove_last(list);
 
-    link_t **previous = find_previous_link(&list->first, index);
+    link_t **previous = find_link_pointer(&list->first, index);
     if (*previous == NULL)
         return -1;
 
@@ -168,7 +168,7 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 {
-    link_t **previous = find_previous_link(&list->first, index);
+    link_t **previous = find_link_pointer(&list->first, index);
     if (*previous == NULL)
         return -1;
 
