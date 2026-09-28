@@ -187,3 +187,10 @@ bool ioopm_list_is_empty(ioopm_list_t *list)
 {
     return ioopm_list_size(list) == 0;
 }
+
+// Might be nice to have for quick checks, must be added in header file
+// if it should be kept.
+bool ioopm_list_has_index(ioopm_list_t *list, size_t index)
+{
+    return ioopm_list_size(list) > index;
+}
