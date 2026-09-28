@@ -40,31 +40,31 @@ void ioopm_list_destroy(ioopm_list_t *list)
 
 void ioopm_list_append(ioopm_list_t *list, elem_t value)
 {
-    link_t new = {.elem = value, .next = NULL};
+    link_t *new = link_create(value, NULL);
 
     if (ioopm_list_is_empty(list))
     {
-        list->first = &new;
+        list->first = new;
     }
     else
     {
-        list->last->next = &new;
+        list->last->next = new;
     }
 
-    list->last = &new;
+    list->last = new;
     list->size++;
 }
 
 void ioopm_list_prepend(ioopm_list_t *list, elem_t value)
 {
-    link_t new = {.elem = value, .next = list->first};
+    link_t *new = link_create(value, list->first);
 
-    list->first = &new;
+    list->first = new;
     list->size++;
 
     if (ioopm_list_is_empty(list))
     {
-        list->last = &new;
+        list->last = new;
     }
 }
 
@@ -80,14 +80,14 @@ elem_t ioopm_list_last(ioopm_list_t *list)
 
 // Function get pointer to link
 
-link_t **find_previous_link(link_t **start, int index)
+static link_t **find_previous_link(link_t **start, size_t index)
 {
     if (*start == NULL || index == 0)
         return start;
     return find_previous_link(&(*start)->next, index - 1);
 }
 
-void ioopm_list_insert(ioopm_list_t *list, int index, elem_t elem)
+void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
 {
     assert(list->size >= index);
 
@@ -105,7 +105,7 @@ void ioopm_list_insert(ioopm_list_t *list, int index, elem_t elem)
 
 elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 {
-    link_t **previous = find_previous_link(list, index);
+    link_t **previous = find_previous_link(&list->first, index);
 }
 
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
