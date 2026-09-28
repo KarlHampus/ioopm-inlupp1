@@ -114,60 +114,60 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
     }
 }
 
-static bool remove_last(ioopm_list_t *list, elem_t *result)
+static elem_t remove_last(ioopm_list_t *list)
 {
-    if (list->size == 0) return false;
+    if (list->size == 0) return -1;
     if (list->size == 1)
     {
-        *result = list->first->elem;
+        elem_t result = list->first->elem;
 
         link_destroy(list->first->elem);
 
         list->first = NULL;
         list->last = NULL;
 
-        return true;
+        return result;
     }
 
     link_t **prev_prev = find_previous_link(&list->first, list->size - 2);
     link_t *prev = (*prev_prev)->next;
     link_t *to_remove = prev->next;
 
-    *result = to_remove->elem;
+    elem_t result = to_remove->elem;
     prev->next = to_remove->next;
 
     link_destroy(to_remove);
 
     list->last = prev->next;
-    return true;
+    return result;
 }
 
-bool ioopm_list_remove(ioopm_list_t *list, size_t index, elem_t *result)
+elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 {
     if (index == list->size - 1)
-        return remove_last(list, result);
+        return remove_last(list);
 
     link_t **previous = find_previous_link(&list->first, index);
     if (*previous == NULL)
-        return false;
+        return -1;
 
     link_t *to_remove = *previous;
-    *result = to_remove->elem;
+    elem_t result = to_remove->elem;
     *previous = to_remove->next;
     link_destroy(to_remove);
 
-    return true;
+    return result;
 }
 
-bool ioopm_list_get(ioopm_list_t *list, size_t index, elem_t *result)
+elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 {
     link_t **previous = find_previous_link(&list->first, index);
     if (*previous == NULL)
-        return false;
+        return -1;
 
-    *result = (*previous)->elem;
+    elem_t result = (*previous)->elem;
 
-    return true;
+    return result;
 }
 
 int ioopm_list_size(ioopm_list_t *list)

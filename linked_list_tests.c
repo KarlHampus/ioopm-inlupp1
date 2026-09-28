@@ -61,6 +61,7 @@ void test_append_get_singleton()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, 10);
+
     CU_ASSERT_EQUAL(ioopm_list_get(l, 0), 10);
 
     ioopm_list_destroy(l);
@@ -95,7 +96,7 @@ void test_get_append_many_times()
         CU_ASSERT_EQUAL(ioopm_list_get(l, i), i);
     }
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Append / Prepend
@@ -207,7 +208,7 @@ void test_prepend_many_times()
     CU_ASSERT_EQUAL(ioopm_list_get(l, 19), 0);
     CU_ASSERT_EQUAL(ioopm_list_size(l), 20);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Prepend / Remove
@@ -275,7 +276,7 @@ void test_size_many_values()
 
     CU_ASSERT_EQUAL(ioopm_list_size(l), 20);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Head (idk what should happen here, should it be possible?)
@@ -285,7 +286,7 @@ void test_size_many_values()
 
 //     ioopm_list_head(l);
 
-//     ioopm_list_destroy(l);    
+//     ioopm_list_destroy(l);
 // }
 
 
@@ -297,7 +298,7 @@ void test_head_singleton()
     ioopm_list_append(l, 10);
     CU_ASSERT_EQUAL(ioopm_list_head(l), 10);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Head / Append / Prepend
@@ -315,7 +316,7 @@ void test_head_prepend_append()
     ioopm_list_prepend(l, 40);
     CU_ASSERT_EQUAL(ioopm_list_head(l), 40);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Head / Remove
@@ -334,7 +335,7 @@ void test_head_after_remove_first()
     ioopm_list_remove(l, 0);
     CU_ASSERT_EQUAL(ioopm_list_head(l), 30);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Head / Remove
@@ -358,7 +359,7 @@ void test_head_after_remove_not_first()
     ioopm_list_remove(l, 1);
     CU_ASSERT_EQUAL(ioopm_list_head(l), 10);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Last
@@ -369,7 +370,7 @@ void test_last_singleton()
     ioopm_list_append(l, 10);
     CU_ASSERT_EQUAL(ioopm_list_last(l), 10);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Last / Append / Prepend
@@ -387,7 +388,7 @@ void test_last_prepend_append()
     ioopm_list_prepend(l, 40);
     CU_ASSERT_EQUAL(ioopm_list_last(l), 30);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Last / Remove
@@ -409,7 +410,7 @@ void test_last_after_remove_last()
     ioopm_list_remove(l, 1);
     CU_ASSERT_EQUAL(ioopm_list_last(l), 10);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Last / Remove
@@ -433,7 +434,7 @@ void test_last_after_remove_not_last()
     ioopm_list_remove(l, 1);
     CU_ASSERT_EQUAL(ioopm_list_last(l), 40);
 
-    ioopm_list_destroy(l);    
+    ioopm_list_destroy(l);
 }
 
 // Insert
@@ -528,7 +529,7 @@ void test_insert_remove()
 
     CU_ASSERT_EQUAL(ioopm_list_remove(l, 0), 20);
     CU_ASSERT_EQUAL(ioopm_list_remove(l, 1), 10);
-    
+
     ioopm_list_insert(l, 1, 40);
     CU_ASSERT_EQUAL(ioopm_list_size(l), 2);
     CU_ASSERT_EQUAL(ioopm_list_get(l, 0), 30);

@@ -50,7 +50,7 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem);
 /// @param list the linked list
 /// @param index the position in the list
 /// @return the elem removed
-bool ioopm_list_remove(ioopm_list_t *list, size_t index, elem_t *result);
+elem_t ioopm_list_remove(ioopm_list_t *list, size_t index);
 
 /// @brief Retrieve an element from a linked list in O(n) time.
 /// The valid values of index are [0,n-1] for a list of n elements,
@@ -59,7 +59,7 @@ bool ioopm_list_remove(ioopm_list_t *list, size_t index, elem_t *result);
 /// @param list the linked list that will be extended
 /// @param index the position in the list
 /// @return the elem at the given position
-bool ioopm_list_get(ioopm_list_t *list, size_t index, elem_t *result);
+elem_t ioopm_list_get(ioopm_list_t *list, size_t index);
 
 /// @brief Lookup the number of elements in the linked list in O(1) time
 /// @param list the linked list
