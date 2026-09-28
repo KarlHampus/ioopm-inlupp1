@@ -2,11 +2,20 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-struct list 
+typedef int elem_t;
+
+typedef struct link
 {
-    // TODO: Stub
-    int first;
-}; 
+    elem_t elem;
+    link_t *next;
+} link_t;
+
+struct list
+{
+    link_t *first;
+    link_t *last;
+    size_t size;
+};
 
 ioopm_list_t *ioopm_list_create(void)
 {
@@ -66,7 +75,7 @@ int ioopm_list_remove(ioopm_list_t *list, int index)
 }
 
 int ioopm_list_get(ioopm_list_t *list, int index)
-{    
+{
     // TODO: Stub
     (void) list;
     (void) index;
