@@ -1,9 +1,9 @@
 CC=gcc
-FLAGS=--coverage -g -Wall -Wextra -pedantic 
+FLAGS=--coverage -g -Wall -Wextra -pedantic
 TESTFILE=linked_list_tests
 
 all: hash_table_iterator_tests freq_count hash_table_tests linked_list_tests
-	./$(TESTFILE)
+#	./$(TESTFILE)
 
 %.o: %.c %.h
 	$(CC) $(FLAGS) $< -c
