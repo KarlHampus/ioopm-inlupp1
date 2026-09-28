@@ -40,7 +40,15 @@ ioopm_list_t *ioopm_list_create(void)
 
 void ioopm_list_destroy(ioopm_list_t *list)
 {
-    free(list);
+    if (list->first != NULL)
+    {
+        ioopm_list_remove(list, 0);
+        ioopm_list_destroy(list);
+    }
+    else 
+    {
+        free(list);
+    }
 }
 
 void ioopm_list_append(ioopm_list_t *list, elem_t value)
@@ -117,53 +125,32 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
     }
 }
 
-static elem_t remove_last(ioopm_list_t *list)
+static elem_t remove_elem(ioopm_list_t *list, link_t **link_pointer, link_t *new_last, size_t index)
 {
-    if (list->size == 0) return -1;
-    if (list->size == 1)
-    {
-        elem_t result = list->first->elem;
-
-        link_destroy(list->first);
-
-        list->first = NULL;
-        list->last = NULL;
-        list->size--;
-
-        return result;
-    }
-
-    link_t **ptr_to_prev_link_ptr = find_link_pointer(&list->first, list->size - 2);
-    link_t *to_remove = (*ptr_to_prev_link_ptr)->next;
-
+    link_t *to_remove = *link_pointer;
     elem_t result = to_remove->elem;
-    (*ptr_to_prev_link_ptr)->next = NULL;
+    *link_pointer = to_remove->next;
 
-    link_destroy(to_remove);
+    if (to_remove->next == NULL) list->last = new_last;
+    if (index == 0) list->first = *link_pointer;
 
-    list->last = *ptr_to_prev_link_ptr;
     list->size--;
+    link_destroy(to_remove);
 
     return result;
 }
 
 elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 {
-    if (index == list->size - 1)
-        return remove_last(list);
+    if (list->size == 0) return -1;
+    if (index == 0)
+    {
+        return remove_elem(list, &list->first, NULL, index);
+    }
 
-    link_t **previous = find_link_pointer(&list->first, index);
-    if (*previous == NULL)
-        return -1;
+    link_t **previous_link_pointer = find_link_pointer(&list->first, index - 1);
 
-    link_t *to_remove = *previous;
-    elem_t result = to_remove->elem;
-    *previous = to_remove->next;
-    link_destroy(to_remove);
-
-    list->size--;
-
-    return result;
+    return remove_elem(list, &(*previous_link_pointer)->next, *previous_link_pointer, index);;
 }
 
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
