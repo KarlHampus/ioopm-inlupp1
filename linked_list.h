@@ -1,6 +1,8 @@
 #pragma once
+#include <stdlib.h>
 #include <stdbool.h>
 
+typedef int elem_t;
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
 
 /// @brief Creates a new empty list
@@ -13,23 +15,23 @@ void ioopm_list_destroy(ioopm_list_t *list);
 
 /// @brief Insert at the end of a linked list in O(1) time
 /// @param list the linked list that will be appended
-/// @param value the value to be appended
-void ioopm_list_append(ioopm_list_t *list, int value);
+/// @param elem the elem to be appended
+void ioopm_list_append(ioopm_list_t *list, elem_t elem);
 
 /// @brief Insert at the front of a linked list in O(1) time
 /// @param list the linked list that will be prepended to
-/// @param value the value to be prepended
-void ioopm_list_prepend(ioopm_list_t *list, int value);
+/// @param elem the elem to be prepended
+void ioopm_list_prepend(ioopm_list_t *list, elem_t elem);
 
 /// @brief Return the first element of a linked list in O(1) time
 /// @pre the list is non-empty
 /// @param list the linked list to take the head of
-int ioopm_list_head(ioopm_list_t *list);
+elem_t ioopm_list_head(ioopm_list_t *list);
 
 /// @brief Return the last element of a linked list in O(1) time
 /// @pre the list is non-empty
 /// @param list the linked list to take the last element of
-int ioopm_list_last(ioopm_list_t *list);
+elem_t ioopm_list_last(ioopm_list_t *list);
 
 /// @brief Insert an element into a linked list in O(n) time.
 /// The valid values of index are [0,n] for a list of n elements,
@@ -38,8 +40,8 @@ int ioopm_list_last(ioopm_list_t *list);
 /// @pre 0 <= index <= length(list)
 /// @param list the linked list that will be extended
 /// @param index the position in the list
-/// @param value the value to be inserted
-void ioopm_list_insert(ioopm_list_t *list, int index, int value);
+/// @param elem the elem to be inserted
+void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem);
 
 /// @brief Remove an element from a linked list in O(n) time.
 /// The valid values of index are [0,n-1] for a list of n elements,
@@ -47,8 +49,8 @@ void ioopm_list_insert(ioopm_list_t *list, int index, int value);
 /// @pre 0 <= index < length(list)
 /// @param list the linked list
 /// @param index the position in the list
-/// @return the value removed
-int ioopm_list_remove(ioopm_list_t *list, int index);
+/// @return the elem removed
+elem_t ioopm_list_remove(ioopm_list_t *list, size_t index);
 
 /// @brief Retrieve an element from a linked list in O(n) time.
 /// The valid values of index are [0,n-1] for a list of n elements,
@@ -56,8 +58,8 @@ int ioopm_list_remove(ioopm_list_t *list, int index);
 /// @pre 0 <= index < length(list)
 /// @param list the linked list that will be extended
 /// @param index the position in the list
-/// @return the value at the given position
-int ioopm_list_get(ioopm_list_t *list, int index);
+/// @return the elem at the given position
+elem_t ioopm_list_get(ioopm_list_t *list, size_t index);
 
 /// @brief Lookup the number of elements in the linked list in O(1) time
 /// @param list the linked list
