@@ -65,12 +65,13 @@ void ioopm_list_prepend(ioopm_list_t *list, elem_t value)
     link_t *new = link_create(value, list->first);
 
     list->first = new;
-    list->size++;
 
     if (ioopm_list_is_empty(list))
     {
         list->last = new;
     }
+
+    list->size++;
 }
 
 elem_t ioopm_list_head(ioopm_list_t *list)
@@ -111,14 +112,15 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
         link_t *link_to_move = *prev_link;
         link_t *link_to_insert = link_create(elem, link_to_move);
         *prev_link = link_to_insert;
+
+        list->size++;
     }
 }
 
 static elem_t remove_last(ioopm_list_t *list)
 {
     if (list->size == 0) return -1;
-    list->size--;
-    if (list->size == 0)
+    if (list->size == 1)
     {
         elem_t result = list->first->elem;
 
@@ -126,20 +128,22 @@ static elem_t remove_last(ioopm_list_t *list)
 
         list->first = NULL;
         list->last = NULL;
+        list->size--;
 
         return result;
     }
 
-    link_t **prev_prev = find_previous_link(&list->first, list->size - 1);
-    link_t *prev = (*prev_prev)->next;
-    link_t *to_remove = prev->next;
+    link_t **ptr_to_prev_link_ptr = find_previous_link(&list->first, list->size - 2);
+    link_t *to_remove = (*ptr_to_prev_link_ptr)->next;
 
     elem_t result = to_remove->elem;
-    prev->next = to_remove->next;
+    (*ptr_to_prev_link_ptr)->next = NULL;
 
     link_destroy(to_remove);
 
-    list->last = prev->next;
+    list->last = *ptr_to_prev_link_ptr;
+    list->size--;
+
     return result;
 }
 
