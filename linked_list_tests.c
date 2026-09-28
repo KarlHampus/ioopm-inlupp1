@@ -432,7 +432,7 @@ void test_last_after_remove_not_last()
     CU_ASSERT_EQUAL(ioopm_list_last(l), 40);
 
     ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_last(l), 40);
+    CU_ASSERT_EQUAL(ioopm_list_last(l), 20);
 
     ioopm_list_destroy(l);
 }
@@ -478,14 +478,15 @@ void test_insert_many_times()
 
     for (int i = 0; i < 20; i++)
     {
-        ioopm_list_insert(l, i * 32 % (i + 1), i);
+        int random_index = (i * 32) % (i + 1);
+        ioopm_list_insert(l, random_index, i);
     }
 
     CU_ASSERT_EQUAL(ioopm_list_size(l), 20);
 
     ioopm_list_insert(l, 0, 1001);
     ioopm_list_insert(l, 13, 1002);
-    ioopm_list_insert(l, 21, 1003);
+    ioopm_list_insert(l, 22, 1003);
 
     CU_ASSERT_EQUAL(ioopm_list_head(l), 1001);
     CU_ASSERT_EQUAL(ioopm_list_get(l, 13), 1002);
@@ -534,8 +535,8 @@ void test_insert_remove()
     CU_ASSERT_EQUAL(ioopm_list_size(l), 2);
     CU_ASSERT_EQUAL(ioopm_list_get(l, 0), 30);
 
-    ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 1), 30);
+    ioopm_list_remove(l, 0);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0), 40);
     CU_ASSERT_EQUAL(ioopm_list_size(l), 0);
 
     ioopm_list_destroy(l);
@@ -565,39 +566,72 @@ int main()
 	// the test in question. If you want to add another test, just
 	// copy a line below and change the information
 	if (
-		(CU_add_test(my_test_suite, "Test test", test_test) == NULL) ||
-		(CU_add_test(my_test_suite, "[Create/Destroy] Create and destroy.", test_create_destroy) == NULL) ||
-		(CU_add_test(my_test_suite, "[Is Empty] Empty.", test_is_empty_on_empty) == NULL) ||
-		(CU_add_test(my_test_suite, "[Is Empty / Append] Singleton.", test_is_empty_on_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Append / Get] Singleton.", test_append_get_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Append / Get] Twice.", test_append_get_twice) == NULL) ||
-		(CU_add_test(my_test_suite, "[Append / Get] Many times.", test_get_append_many_times) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend] Once.", test_prepend_once) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend] Twice.", test_prepend_twice) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend] Many times.", test_prepend_many_times) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend / Append] A few times.", test_append_and_prepend) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove] Singleton.", test_remove_on_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove] Multple values.", test_remove_on_multiple_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove / Append] Append after remove.", test_append_after_remove) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove / Prepend] Prepend after remove.", test_prepend_remove) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] Empty.", test_size_empty) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] Singleton.", test_size_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] Two values.", test_size_two_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] A lot of values.", test_size_many_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head] Singleton.", test_head_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head] After remove first.", test_head_after_remove_first) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head / Remove] After remove one other than first.", test_head_after_remove_not_first) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head / Prepend / Appeend] Multiple values.", test_head_prepend_append) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last] Singleton.", test_last_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last] After remove last.", test_last_after_remove_last) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last / Remove] After remove one other than last.", test_last_after_remove_not_last) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last / Prepend / Appeend] Multiple values.", test_last_prepend_append) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Once.", test_insert_once) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Twice first.", test_insert_twice_first) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Twice last.", test_insert_twice_last) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Many values.", test_insert_many_times) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert / Prepend / Append] Multiple values.", test_insert_append_prepend) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert / Remove] A few values.", test_insert_remove) == NULL) ||
+		(CU_add_test(my_test_suite, "Test test                                          ", 
+                     test_test) == NULL) ||
+        (CU_add_test(my_test_suite, "[Create/Destroy] Create and destroy.               ", 
+                     test_create_destroy) == NULL) ||
+		(CU_add_test(my_test_suite, "[Is Empty] Empty.                                  ", 
+                     test_is_empty_on_empty) == NULL) ||
+		(CU_add_test(my_test_suite, "[Is Empty / Append] Singleton.                     ", 
+                     test_is_empty_on_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[Append / Get] Singleton.                          ", 
+                     test_append_get_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[Append / Get] Twice.                              ", 
+                     test_append_get_twice) == NULL) ||
+		(CU_add_test(my_test_suite, "[Append / Get] Many times.                         ", 
+                     test_get_append_many_times) == NULL) ||
+		(CU_add_test(my_test_suite, "[Prepend] Once.                                    ", 
+                     test_prepend_once) == NULL) ||
+		(CU_add_test(my_test_suite, "[Prepend] Twice.                                   ", 
+                     test_prepend_twice) == NULL) ||
+		(CU_add_test(my_test_suite, "[Prepend] Many times.                              ", 
+                     test_prepend_many_times) == NULL) ||
+		(CU_add_test(my_test_suite, "[Prepend / Append] A few times.                    ", 
+                     test_append_and_prepend) == NULL) ||
+		(CU_add_test(my_test_suite, "[Remove] Singleton.                                ", 
+                     test_remove_on_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[Remove] Multple values.                           ", 
+                     test_remove_on_multiple_values) == NULL) ||
+		(CU_add_test(my_test_suite, "[Remove / Append] Append after remove.             ", 
+                     test_append_after_remove) == NULL) ||
+		(CU_add_test(my_test_suite, "[Remove / Prepend] Prepend after remove.           ", 
+                     test_prepend_remove) == NULL) ||
+		(CU_add_test(my_test_suite, "[Size] Empty.                                      ", 
+                     test_size_empty) == NULL) ||
+		(CU_add_test(my_test_suite, "[Size] Singleton.                                  ", 
+                     test_size_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[Size] Two values.                                 ", 
+                     test_size_two_values) == NULL) ||
+		(CU_add_test(my_test_suite, "[Size] A lot of values.                            ", 
+                     test_size_many_values) == NULL) ||
+		(CU_add_test(my_test_suite, "[Head] Singleton.                                  ", 
+                     test_head_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[Head] After remove first.                         ", 
+                     test_head_after_remove_first) == NULL) ||
+		(CU_add_test(my_test_suite, "[Head / Remove] After remove one other than first. ", 
+                     test_head_after_remove_not_first) == NULL) ||
+		(CU_add_test(my_test_suite, "[Head / Prepend / Appeend] Multiple values.        ", 
+                     test_head_prepend_append) == NULL) ||
+		(CU_add_test(my_test_suite, "[Last] Singleton.                                  ", 
+                     test_last_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[Last] After remove last.                          ", 
+                     test_last_after_remove_last) == NULL) ||
+		(CU_add_test(my_test_suite, "[Last / Remove] After remove one other than last.  ", 
+                     test_last_after_remove_not_last) == NULL) ||
+		(CU_add_test(my_test_suite, "[Last / Prepend / Appeend] Multiple values.        ", 
+                     test_last_prepend_append) == NULL) ||
+        (CU_add_test(my_test_suite, "[Insert] Once.                                     ", 
+                     test_insert_once) == NULL) ||
+        (CU_add_test(my_test_suite, "[Insert] Twice first.                              ", 
+                     test_insert_twice_first) == NULL) ||
+        (CU_add_test(my_test_suite, "[Insert] Twice last.                               ", 
+                     test_insert_twice_last) == NULL) ||
+        (CU_add_test(my_test_suite, "[Insert] Many values.                              ", 
+                     test_insert_many_times) == NULL) ||
+        (CU_add_test(my_test_suite, "[Insert / Prepend / Append] Multiple values.       ", 
+                     test_insert_append_prepend) == NULL) ||
+        (CU_add_test(my_test_suite, "[Insert / Remove] A few values.                    ", 
+                     test_insert_remove) == NULL) ||
 		0)
 	{
 		// If adding any of the tests fails, we tear down CUnit and exit
