@@ -5,11 +5,22 @@
 
 typedef int elem_t;
 
-typedef struct link
+typedef struct link link_t;
+
+struct link
 {
     elem_t elem;
     link_t *next;
-} link_t;
+};
+
+link_t *link_create(elem_t elem, link_t *next)
+{
+    link_t *link = calloc(1, sizeof(link_t));
+    link->elem = elem;
+    link->next = next;
+
+    return link;
+}
 
 struct list
 {
@@ -55,29 +66,24 @@ elem_t ioopm_list_last(ioopm_list_t *list)
 
 // Function get pointer to link
 
-link_t **find_previous_link(ioopm_list_t *list, int index)
+link_t **find_previous_link(link_t **start, int index)
+{
+    if (*start == NULL || index == 0) return start;
+    return find_previous_link(&(*start)->next, index - 1);
+}
+
+void ioopm_list_insert(ioopm_list_t *list, int index, elem_t elem)
 {
     assert(list->size >= index);
 
-    link_t **link_ptr = &list->first;
+    if (index == 0) return ioopm_list_prepend(list, elem);
+    if (index == list->size) return ioopm_list_append(list, elem);
 
-    if (*link_ptr == NULL) return link_ptr;
+    link_t **prev_link = find_previous_link(&list->first, index);
 
-    while (index > 0)
-    {
-        link_ptr = &(*link_ptr)->next;
-        index--;
-    }
-
-    return link_ptr;
-}
-
-void ioopm_list_insert(ioopm_list_t *list, int index, int value)
-{
-    // TODO: Stub
-    (void)list;
-    (void)index;
-    (void)value;
+    link_t *link_to_move = *prev_link;
+    link_t *link_to_insert = link_create(elem, link_to_move);
+    *prev_link = link_to_insert;
 }
 
 int ioopm_list_remove(ioopm_list_t *list, int index)
