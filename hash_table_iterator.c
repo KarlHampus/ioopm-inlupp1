@@ -52,8 +52,6 @@ void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it)
 
     while (it->current_entry == NULL && !at_last_bucket)
     {
-
-        // Increase bucket, but never past the bucket size.
         it->current_bucket++;
         it->current_entry = it->ht->buckets[it->current_bucket];
 
