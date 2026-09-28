@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 typedef int elem_t;
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
@@ -64,7 +65,7 @@ elem_t ioopm_list_get(ioopm_list_t *list, size_t index);
 /// @brief Lookup the number of elements in the linked list in O(1) time
 /// @param list the linked list
 /// @return the number of elements in the list
-int ioopm_list_size(ioopm_list_t *list);
+size_t ioopm_list_size(ioopm_list_t *list);
 
 /// @brief Test whether a list is empty or not
 /// @param list the linked list

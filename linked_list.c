@@ -178,7 +178,7 @@ elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
     return result;
 }
 
-int ioopm_list_size(ioopm_list_t *list)
+size_t ioopm_list_size(ioopm_list_t *list)
 {
     return list->size;
 }
