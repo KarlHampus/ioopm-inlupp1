@@ -93,6 +93,7 @@ static link_t **find_previous_link(link_t **start, size_t index)
 }
 
 void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
+void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
 {
     assert(list->size >= index);
 
@@ -116,9 +117,30 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
 
 static bool remove_last(ioopm_list_t *list, elem_t *result)
 {
-    (void)list;
-    (void)result;
-    return false;
+    if (list->size == 0) return false;
+    if (list->size == 1)
+    {
+        *result = list->first->elem;
+
+        link_destroy(list->first->elem);
+
+        list->first = NULL;
+        list->last = NULL;
+
+        return true;
+    }
+
+    link_t **prev_prev = find_previous_link(&list->first, list->size - 2);
+    link_t *prev = (*prev_prev)->next;
+    link_t *to_remove = prev->next;
+
+    *result = to_remove->elem;
+    prev->next = to_remove->next;
+
+    link_destroy(to_remove);
+
+    list->last = prev->next;
+    return true;
 }
 
 bool ioopm_list_remove(ioopm_list_t *list, size_t index, elem_t *result)
