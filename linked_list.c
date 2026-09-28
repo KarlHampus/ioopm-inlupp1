@@ -58,6 +58,8 @@ int ioopm_list_last(ioopm_list_t *list)
     return -1;
 }
 
+// Function get pointer to link
+
 void ioopm_list_insert(ioopm_list_t *list, int index, int value)
 {
     // TODO: Stub
@@ -91,7 +93,5 @@ int ioopm_list_size(ioopm_list_t *list)
 
 bool ioopm_list_is_empty(ioopm_list_t *list)
 {
-    // TODO: Stub
-    (void) list;
-    return false;
+    return ioopm_list_size(list) == 0;
 }
