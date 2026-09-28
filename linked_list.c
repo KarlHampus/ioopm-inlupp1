@@ -1,6 +1,7 @@
 #include "linked_list.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 
 typedef int elem_t;
 
@@ -59,6 +60,23 @@ int ioopm_list_last(ioopm_list_t *list)
 }
 
 // Function get pointer to link
+
+link_t **find_previous_link(ioopm_list_t *list, int index)
+{
+    assert(list->size >= index);
+
+    link_t **link_ptr = &list->first;
+
+    if (*link_ptr == NULL) return link_ptr;
+
+    while (index > 0)
+    {
+        link_ptr = &(*link_ptr)->next;
+        index--;
+    }
+
+    return link_ptr;
+}
 
 void ioopm_list_insert(ioopm_list_t *list, int index, int value)
 {
