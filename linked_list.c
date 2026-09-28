@@ -20,6 +20,11 @@ link_t *link_create(elem_t elem, link_t *next)
     return link;
 }
 
+void link_destroy(link_t *link)
+{
+    free(link);
+}
+
 struct list
 {
     link_t *first;
@@ -92,28 +97,56 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
     assert(list->size >= index);
 
     if (index == 0)
-        return ioopm_list_prepend(list, elem);
-    if (index == list->size)
-        return ioopm_list_append(list, elem);
+    {
+        ioopm_list_prepend(list, elem);
+    }
+    else if (index == list->size)
+    {
+        ioopm_list_append(list, elem);
+    }
+    else
+    {
+        link_t **prev_link = find_previous_link(&list->first, index);
 
-    link_t **prev_link = find_previous_link(&list->first, index);
-
-    link_t *link_to_move = *prev_link;
-    link_t *link_to_insert = link_create(elem, link_to_move);
-    *prev_link = link_to_insert;
+        link_t *link_to_move = *prev_link;
+        link_t *link_to_insert = link_create(elem, link_to_move);
+        *prev_link = link_to_insert;
+    }
 }
 
-elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
+static bool remove_last(ioopm_list_t *list, elem_t *result)
+{
+    (void)list;
+    (void)result;
+    return false;
+}
+
+bool ioopm_list_remove(ioopm_list_t *list, size_t index, elem_t *result)
+{
+    if (index == list->size - 1)
+        return remove_last(list, result);
+
+    link_t **previous = find_previous_link(&list->first, index);
+    if (*previous == NULL)
+        return false;
+
+    link_t *to_remove = *previous;
+    *result = to_remove->elem;
+    *previous = to_remove->next;
+    link_destroy(to_remove);
+
+    return true;
+}
+
+bool ioopm_list_get(ioopm_list_t *list, size_t index, elem_t *result)
 {
     link_t **previous = find_previous_link(&list->first, index);
-}
+    if (*previous == NULL)
+        return false;
 
-elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
-{
-    // TODO: Stub
-    (void)list;
-    (void)index;
-    return -1;
+    *result = (*previous)->elem;
+
+    return true;
 }
 
 int ioopm_list_size(ioopm_list_t *list)
