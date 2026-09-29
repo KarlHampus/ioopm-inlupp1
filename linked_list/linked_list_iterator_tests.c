@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "linked_list.h"
+#include "linked_list_iterator.h"
 
 int init_suite(void)
 {
@@ -24,8 +25,76 @@ void test_test()
 }
 
 // Create/Destroy
+void test_create_destroy()
+{
+    ioopm_list_t *l = ioopm_list_create();
+    ioopm_list_iterator_t *it = ioopm_list_iterator_create(l);
+
+    CU_ASSERT_PTR_NOT_NULL(it);
+
+    ioopm_list_iterator_destroy(it);
+    ioopm_list_destroy(l);
+}
+
 // Iterator at end when empty
+void test_at_end_empty()
+{
+    ioopm_list_t *l = ioopm_list_create();
+    ioopm_list_iterator_t *it = ioopm_list_iterator_create(l);
+
+    // Empty list, should be at end
+    CU_ASSERT_TRUE(ioopm_list_iterator_at_end(it));
+
+    ioopm_list_iterator_destroy(it);
+    ioopm_list_destroy(l);
+}
+
 // Iterator not at end and at end singleton / iterator advance
+void test_at_end_empty()
+{
+    ioopm_list_t *l = ioopm_list_create();
+
+    ioopm_list_append(l, 1);
+
+    ioopm_list_iterator_t *it = ioopm_list_iterator_create(l);
+
+    // Check not at end
+    CU_ASSERT_FALSE(ioopm_list_iterator_at_end(it));
+
+    // Advance and check at end
+    ioopm_list_iterator_advance(it);
+    CU_ASSERT_TRUE(ioopm_list_iterator_at_end(it));
+
+    ioopm_list_iterator_destroy(it);
+    ioopm_list_destroy(l);
+}
+
+void test_advance_at_end_many_times()
+{
+    ioopm_list_t *l = ioopm_list_create();
+
+    // Add a lot of elements
+    for (int i = 0; i < 100; i++)
+    {
+        ioopm_list_prepend(l, i);
+    }
+
+    ioopm_list_iterator_t *it = ioopm_list_iterator_create(l);
+
+    // Advance through the whole list and check at every 30th element
+    for (int i = 0; i < 100; i++)
+    {
+        if (i % 30 == 0) CU_ASSERT_FALSE(ioopm_list_iterator_at_end(it));
+        ioopm_list_iterator_advance(it); 
+    }
+    
+    // Should be at end now
+    CU_ASSERT_TRUE(ioopm_list_iterator_at_end(it));
+
+    ioopm_list_iterator_destroy(it);
+    ioopm_list_destroy(l);
+}
+
 
 // Iterator current / iterator advance
 // Iterator insert/ Iterator remove
