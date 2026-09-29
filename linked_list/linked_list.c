@@ -2,23 +2,9 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <linked_list_structs.h>
 
 // Structs
-
-typedef struct link link_t;
-
-struct link
-{
-    elem_t elem;
-    link_t *next;
-};
-
-struct list
-{
-    link_t *first;
-    link_t *last;
-    size_t size;
-};
 
 // Static functions
 
@@ -38,7 +24,8 @@ static void link_destroy(link_t *link)
 
 static link_t **find_pointer_to_link(link_t **start, size_t index)
 {
-    if (*start == NULL || index == 0) return start;
+    if (*start == NULL || index == 0)
+        return start;
 
     return find_pointer_to_link(&(*start)->next, index - 1);
 }
@@ -164,7 +151,8 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 {
     link_t **pointer_to_link = find_pointer_to_link(&list->first, index);
-    if (*pointer_to_link == NULL) return -1;
+    if (*pointer_to_link == NULL)
+        return -1;
 
     elem_t result = (*pointer_to_link)->elem;
 
