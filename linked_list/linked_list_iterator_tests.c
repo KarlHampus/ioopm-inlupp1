@@ -20,10 +20,15 @@ int clean_suite(void)
 // General tests
 void test_test()
 {
-    CU_ASSERT_TRUE(true);
+	CU_ASSERT_TRUE(true);
 }
 
+// Create/Destroy
+// Iterator at end when empty
+// Iterator not at end and at end singleton / iterator advance
 
+// Iterator current / iterator advance
+// Iterator insert/ Iterator remove
 
 int main()
 {
@@ -47,8 +52,8 @@ int main()
 	// the test in question. If you want to add another test, just
 	// copy a line below and change the information
 	if (
-		(CU_add_test(my_test_suite, "Test test                                          ", 
-                     test_test) == NULL) ||
+		(CU_add_test(my_test_suite, "Test test                                          ",
+					 test_test) == NULL) ||
 		0)
 	{
 		// If adding any of the tests fails, we tear down CUnit and exit

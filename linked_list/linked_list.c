@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <linked_list_structs.h>
+#include "linked_list_structs.h"
 
 // Structs
 
