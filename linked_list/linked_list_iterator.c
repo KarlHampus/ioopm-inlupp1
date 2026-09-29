@@ -42,6 +42,7 @@ void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
 // Olle
 elem_t ioopm_list_iterator_current(ioopm_list_iterator_t *iter)
 {
+    assert(iter->current != NULL);
     return iter->current->elem;
 }
 

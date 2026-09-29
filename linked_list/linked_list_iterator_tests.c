@@ -102,19 +102,18 @@ void test_iterator_current()
 {
 	ioopm_list_t *lst = ioopm_list_create();
 	ioopm_list_append(lst, 1);
-	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
-
-	ioopm_list_iterator_advance(it);
-
-	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 1);
-
 	ioopm_list_append(lst, 2);
 	ioopm_list_append(lst, 3);
+	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
 
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 1);
 	ioopm_list_iterator_advance(it);
 	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 2);
 	ioopm_list_iterator_advance(it);
 	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 3);
+
+	ioopm_list_iterator_destroy(it);
+	ioopm_list_destroy(lst);
 }
 
 void test_iterator_insert()
@@ -132,6 +131,9 @@ void test_iterator_insert()
 	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 2); // Make sure we're still at the same index
 	CU_ASSERT_EQUAL(ioopm_list_size(lst), 4);			 // Make sure a new element was inserted.
 	CU_ASSERT_EQUAL(ioopm_list_get(lst, 1), 150);		 // Make sure the 2nd element is 150
+
+	ioopm_list_iterator_destroy(it);
+	ioopm_list_destroy(lst);
 }
 
 void test_iterator_remove()
@@ -158,6 +160,9 @@ void test_iterator_remove()
 	CU_ASSERT_EQUAL(ioopm_list_size(lst), 1);  // Make sure the size reflects the change
 
 	CU_ASSERT_EQUAL(ioopm_list_get(lst, 0), 1); // Make sure the remaining element is the number 1
+	
+	ioopm_list_iterator_destroy(it);
+	ioopm_list_destroy(lst);
 }
 
 int main()
