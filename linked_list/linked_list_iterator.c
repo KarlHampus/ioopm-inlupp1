@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <assert.h>
 #include "linked_list_iterator.h"
 #include "linked_list.h"
 #include "linked_list_structs.h"
@@ -34,9 +35,10 @@ bool ioopm_list_iterator_at_end(ioopm_list_iterator_t *iter)
 
 void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
 {
-    // Todo: STUB
-    // remember to increase the index :D
-    (void)iter;
+    assert(iter->current != NULL);
+
+    iter->current = iter->current->next;
+    iter->current_index++;
 }
 
 // Olle
@@ -47,12 +49,16 @@ int ioopm_list_iterator_current(ioopm_list_iterator_t *iter)
     return -1;
 }
 
-int ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
+elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
 {
-    // Todo: STUB
-    (void)iter;
-    // remember to increase the index :D
-    return -1;
+    assert(iter->current != NULL);
+
+    link_t *next = iter->current->next;
+    elem_t elem = ioopm_list_remove(iter->list, iter->current_index);
+
+    iter->current = next;
+
+    return elem;
 }
 
 // Olle
