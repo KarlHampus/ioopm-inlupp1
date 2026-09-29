@@ -50,7 +50,7 @@ void test_at_end_empty()
 }
 
 // Iterator not at end and at end singleton / iterator advance
-void test_at_end_empty()
+void test_at_end_singleton()
 {
 	ioopm_list_t *l = ioopm_list_create();
 
@@ -182,8 +182,22 @@ int main()
 	// the test in question. If you want to add another test, just
 	// copy a line below and change the information
 	if (
-		(CU_add_test(my_test_suite, "Test test                                          ",
+		(CU_add_test(my_test_suite, "Test test                      ",
 					 test_test) == NULL) ||
+		(CU_add_test(my_test_suite, "[Create / Destroy] Once.       ",
+					 test_create_destroy) == NULL) ||
+		(CU_add_test(my_test_suite, "[At End] Empty.                ",
+					 test_at_end_empty) == NULL) ||
+		(CU_add_test(my_test_suite, "[At End / Advance] Singleton.  ",
+					 test_at_end_singleton) == NULL) ||
+		(CU_add_test(my_test_suite, "[At End / Advance] Many times. ",
+					 test_advance_at_end_many_times) == NULL) ||
+		(CU_add_test(my_test_suite, "[Current] Different values.    ",
+					 test_iterator_current) == NULL) ||
+		(CU_add_test(my_test_suite, "[Insert] A few times.          ",
+					 test_iterator_insert) == NULL) ||
+		(CU_add_test(my_test_suite, "[Remove] Some elements.        ",
+					 test_iterator_remove) == NULL) ||
 		0)
 	{
 		// If adding any of the tests fails, we tear down CUnit and exit
