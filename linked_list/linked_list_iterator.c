@@ -25,7 +25,6 @@ void ioopm_list_iterator_destroy(ioopm_list_iterator_t *iter)
     free(iter);
 }
 
-// Olle
 bool ioopm_list_iterator_at_end(ioopm_list_iterator_t *iter)
 {
     return iter->current == NULL;
@@ -39,7 +38,6 @@ void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
     iter->current_index++;
 }
 
-// Olle
 elem_t ioopm_list_iterator_current(ioopm_list_iterator_t *iter)
 {
     assert(iter->current != NULL);
@@ -58,7 +56,6 @@ elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
     return elem;
 }
 
-// Olle
 void ioopm_list_iterator_insert(ioopm_list_iterator_t *iter, elem_t element)
 {
     ioopm_list_t *lst = iter->list;
