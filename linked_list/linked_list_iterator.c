@@ -28,9 +28,7 @@ void ioopm_list_iterator_destroy(ioopm_list_iterator_t *iter)
 // Olle
 bool ioopm_list_iterator_at_end(ioopm_list_iterator_t *iter)
 {
-    // Todo: STUB
-    (void)iter;
-    return false;
+    return iter->current == NULL;
 }
 
 void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
@@ -42,11 +40,9 @@ void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
 }
 
 // Olle
-int ioopm_list_iterator_current(ioopm_list_iterator_t *iter)
+elem_t ioopm_list_iterator_current(ioopm_list_iterator_t *iter)
 {
-    // Todo: STUB
-    (void)iter;
-    return -1;
+    return iter->current->elem;
 }
 
 elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
@@ -62,10 +58,11 @@ elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
 }
 
 // Olle
-void ioopm_list_iterator_insert(ioopm_list_iterator_t *iter, int element)
+void ioopm_list_iterator_insert(ioopm_list_iterator_t *iter, elem_t element)
 {
-    // Todo: STUB
-    (void)iter;
-    // remember to increase the index :D
-    (void)element;
+    ioopm_list_t *lst = iter->list;
+
+    ioopm_list_insert(lst, iter->current_index, element);
+
+    iter->current_index++;
 }
