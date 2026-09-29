@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include "linked_list.h"
+#include "linked_list_iterator.h"
+#include "linked_list_structs.h"
 
 int init_suite(void)
 {
@@ -28,7 +30,68 @@ void test_test()
 // Iterator not at end and at end singleton / iterator advance
 
 // Iterator current / iterator advance
-// Iterator insert/ Iterator remove
+
+void test_iterator_current()
+{
+	ioopm_list_t *lst = ioopm_list_create();
+	ioopm_list_append(lst, 1);
+	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
+
+	ioopm_list_iterator_advance(it);
+
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 1);
+
+	ioopm_list_append(lst, 2);
+	ioopm_list_append(lst, 3);
+
+	ioopm_list_iterator_advance(it);
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 2);
+	ioopm_list_iterator_advance(it);
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 3);
+}
+
+void test_iterator_insert()
+{
+
+	ioopm_list_t *lst = ioopm_list_create();
+	ioopm_list_append(lst, 1);
+	ioopm_list_append(lst, 2);
+	ioopm_list_append(lst, 3);
+	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
+
+	ioopm_list_iterator_advance(it); // 2
+
+	ioopm_list_iterator_insert(it, 150);				 // Insert 150 between 1 and 2
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 2); // Make sure we're still at the same index
+	CU_ASSERT_EQUAL(ioopm_list_size(lst), 4);			 // Make sure a new element was inserted.
+	CU_ASSERT_EQUAL(ioopm_list_get(lst, 1), 150);		 // Make sure the 2nd element is 150
+}
+
+void test_iterator_remove()
+{
+	// Create list [1, 2, 3]
+	ioopm_list_t *lst = ioopm_list_create();
+	ioopm_list_append(lst, 1);
+	ioopm_list_append(lst, 2);
+	ioopm_list_append(lst, 3);
+	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
+
+	ioopm_list_iterator_advance(it); // 2
+
+	// Remove an element in the middle
+	ioopm_list_iterator_remove(it); // Remove number 2
+
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 3); // Make sure we're at the next index
+	CU_ASSERT_EQUAL(ioopm_list_size(lst), 2);			 // Make sure the size reflects the change
+
+	// Remove an element at the end
+
+	ioopm_list_iterator_remove(it);			   // Delete the last element
+	CU_ASSERT(ioopm_list_iterator_at_end(it)); // Make sure we're at the end
+	CU_ASSERT_EQUAL(ioopm_list_size(lst), 1);  // Make sure the size reflects the change
+
+	CU_ASSERT_EQUAL(ioopm_list_get(lst, 0), 1); // Make sure the remaining element is the number 1
+}
 
 int main()
 {
