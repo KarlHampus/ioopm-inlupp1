@@ -151,8 +151,7 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 {
     link_t **pointer_to_link = find_pointer_to_link(&list->first, index);
-    if (*pointer_to_link == NULL)
-        return -1;
+    if (*pointer_to_link == NULL) return int_elem(-1);
 
     elem_t result = (*pointer_to_link)->elem;
 
