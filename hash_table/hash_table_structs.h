@@ -1,4 +1,5 @@
 #pragma once
+#include <stddef.h>
 
 typedef struct entry entry_t;
 
@@ -11,7 +12,7 @@ struct entry
 
 struct hash_table
 {
-    unsigned int bucket_size;
-    unsigned int size;
+    size_t bucket_size;
+    size_t size;
     entry_t **buckets;
 };
