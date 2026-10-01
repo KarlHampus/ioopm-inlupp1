@@ -27,12 +27,12 @@ void ioopm_list_prepend(ioopm_list_t *list, elem_t elem);
 /// @brief Return the first element of a linked list in O(1) time
 /// @pre the list is non-empty
 /// @param list the linked list to take the head of
-elem_t ioopm_list_head(ioopm_list_t *list);
+elem_t ioopm_list_head(const ioopm_list_t *list);
 
 /// @brief Return the last element of a linked list in O(1) time
 /// @pre the list is non-empty
 /// @param list the linked list to take the last element of
-elem_t ioopm_list_last(ioopm_list_t *list);
+elem_t ioopm_list_last(const ioopm_list_t *list);
 
 /// @brief Insert an element into a linked list in O(n) time.
 /// The valid values of index are [0,n] for a list of n elements,
@@ -65,9 +65,9 @@ elem_t ioopm_list_get(ioopm_list_t *list, size_t index);
 /// @brief Lookup the number of elements in the linked list in O(1) time
 /// @param list the linked list
 /// @return the number of elements in the list
-size_t ioopm_list_size(ioopm_list_t *list);
+size_t ioopm_list_size(const ioopm_list_t *list);
 
 /// @brief Test whether a list is empty or not
 /// @param list the linked list
 /// @return true if the number of elements int the list is 0, else false
-bool ioopm_list_is_empty(ioopm_list_t *list);
+bool ioopm_list_is_empty(const ioopm_list_t *list);

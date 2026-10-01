@@ -99,12 +99,12 @@ void ioopm_list_prepend(ioopm_list_t *list, elem_t value)
     list->size++;
 }
 
-elem_t ioopm_list_head(ioopm_list_t *list)
+elem_t ioopm_list_head(const ioopm_list_t *list)
 {
     return list->first->elem;
 }
 
-elem_t ioopm_list_last(ioopm_list_t *list)
+elem_t ioopm_list_last(const ioopm_list_t *list)
 {
     return list->last->elem;
 }
@@ -159,12 +159,12 @@ elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
     return result;
 }
 
-size_t ioopm_list_size(ioopm_list_t *list)
+size_t ioopm_list_size(const ioopm_list_t *list)
 {
     return list->size;
 }
 
-bool ioopm_list_is_empty(ioopm_list_t *list)
+bool ioopm_list_is_empty(const ioopm_list_t *list)
 {
     return ioopm_list_size(list) == 0;
 }
