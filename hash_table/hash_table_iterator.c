@@ -16,6 +16,8 @@ struct hash_table_iterator
 
 // Public functions
 
+
+// Skriv om med en hjälpfunktion för typ find next eller något
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht)
 {
     ioopm_hash_table_iterator_t *it = calloc(1, sizeof(ioopm_hash_table_iterator_t));
