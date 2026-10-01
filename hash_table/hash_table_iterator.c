@@ -10,7 +10,7 @@
 struct hash_table_iterator
 {
     ioopm_hash_table_t *ht;
-    unsigned int current_bucket;
+    size_t current_bucket;
     entry_t *current_entry;
 };
 
@@ -39,7 +39,7 @@ void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it)
     free(it);
 }
 
-bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it)
+bool ioopm_hash_table_iterator_at_end(const ioopm_hash_table_iterator_t *it)
 {
     bool at_last_bucket = it->current_bucket >= it->ht->bucket_size - 1;
     return it->current_entry == NULL && at_last_bucket;
@@ -61,12 +61,12 @@ void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it)
     };
 }
 
-char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it)
+char *ioopm_hash_table_iterator_current_key(const ioopm_hash_table_iterator_t *it)
 {
     return it->current_entry->key;
 }
 
-int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it)
+int ioopm_hash_table_iterator_current_value(const ioopm_hash_table_iterator_t *it)
 {
     return it->current_entry->value;
 }
