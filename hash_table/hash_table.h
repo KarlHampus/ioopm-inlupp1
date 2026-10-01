@@ -24,7 +24,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(size_t bucket_size);
 /// @param ht a hash table to be deleted
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht);
 
-/// @brief add key => value entry in hash table ht
+/// @brief add key => value entry in hash table ht, duplicates the key
 /// @param ht hash table operated upon
 /// @param key key to insert
 /// @param value value to insert
