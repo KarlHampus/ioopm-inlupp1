@@ -63,7 +63,7 @@ void test_append_get_singleton()
 
     ioopm_list_append(l, int_elem(10));
 
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -76,8 +76,8 @@ void test_append_get_twice()
     ioopm_list_append(l, int_elem(10));
     ioopm_list_append(l, int_elem(20));
 
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(10).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 10);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 20);
 
     ioopm_list_destroy(l);
 }
@@ -110,12 +110,12 @@ void test_append_and_prepend()
     ioopm_list_prepend(l, int_elem(30));
     ioopm_list_append(l, int_elem(40));
 
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(30).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(20).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 2).i, int_elem(10).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 3).i, int_elem(40).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 30);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 20);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 2).i, 10);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 3).i, 40);
 
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(4).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 4);
 
     ioopm_list_destroy(l);
 }
@@ -126,7 +126,7 @@ void test_remove_on_singleton()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, 10);
     CU_ASSERT_TRUE(ioopm_list_is_empty(l));
 
     ioopm_list_destroy(l);
@@ -141,7 +141,7 @@ void test_append_after_remove()
     ioopm_list_remove(l, 0);
 
     ioopm_list_append(l, int_elem(20));
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 20);
 
     ioopm_list_destroy(l);
 }
@@ -156,16 +156,16 @@ void test_remove_on_multiple_values()
     ioopm_list_append(l, int_elem(30));
     ioopm_list_append(l, int_elem(40));
 
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 2).i, int_elem(30).i);
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 2).i, int_elem(40).i);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 2).i, 30);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 2).i, 40);
 
     // Check that remove lowers size
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(2).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 2);
 
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, int_elem(10).i);
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, 10);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, 20);
 
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(0).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 0);
 
     ioopm_list_destroy(l);
 }
@@ -176,7 +176,7 @@ void test_prepend_once()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_prepend(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -188,8 +188,8 @@ void test_prepend_twice()
     ioopm_list_prepend(l, int_elem(10));
     ioopm_list_prepend(l, int_elem(20));
 
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(20).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 20);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -204,10 +204,10 @@ void test_prepend_many_times()
     }
 
     // Check first, middle and, last, then size
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(19).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 9).i, int_elem(10).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 19).i, int_elem(0).i);
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 19);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 9).i, 10);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 19).i, 0);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 20);
 
     ioopm_list_destroy(l);
 }
@@ -220,13 +220,13 @@ void test_prepend_remove()
     ioopm_list_prepend(l, int_elem(10));
     ioopm_list_prepend(l, int_elem(20));
 
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, 20);
 
     ioopm_list_prepend(l, int_elem(30));
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(30).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 30);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 10);
 
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(2).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 2);
 
     ioopm_list_destroy(l);
 }
@@ -236,7 +236,7 @@ void test_size_empty()
 {
     ioopm_list_t *l = ioopm_list_create();
 
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(0).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 0);
 
     ioopm_list_destroy(l);
 }
@@ -247,7 +247,7 @@ void test_size_singleton()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(1).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 1);
 
     ioopm_list_destroy(l);
 }
@@ -260,7 +260,7 @@ void test_size_two_values()
 
     ioopm_list_append(l, int_elem(10));
     ioopm_list_append(l, int_elem(20));
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(2).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 2);
 
     ioopm_list_destroy(l);
 }
@@ -275,7 +275,7 @@ void test_size_many_values()
         ioopm_list_append(l, elem);
     }
 
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 20);
 
     ioopm_list_destroy(l);
 }
@@ -297,7 +297,7 @@ void test_head_singleton()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -308,14 +308,14 @@ void test_head_prepend_append()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_prepend(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_append(l, int_elem(20));
     ioopm_list_append(l, int_elem(30));
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_prepend(l, int_elem(40));
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(40).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 40);
 
     ioopm_list_destroy(l);
 }
@@ -331,10 +331,10 @@ void test_head_after_remove_first()
     ioopm_list_append(l, int_elem(40));
 
     ioopm_list_remove(l, 0);
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 20);
 
     ioopm_list_remove(l, 0);
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(30).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 30);
 
     ioopm_list_destroy(l);
 }
@@ -345,20 +345,20 @@ void test_head_after_remove_not_first()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_append(l, int_elem(20));
     ioopm_list_append(l, int_elem(30));
     ioopm_list_append(l, int_elem(40));
 
     ioopm_list_remove(l, 3);
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -369,7 +369,7 @@ void test_last_singleton()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -380,14 +380,14 @@ void test_last_prepend_append()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_prepend(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 10);
 
     ioopm_list_append(l, int_elem(20));
     ioopm_list_append(l, int_elem(30));
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(30).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 30);
 
     ioopm_list_prepend(l, int_elem(40));
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(30).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 30);
 
     ioopm_list_destroy(l);
 }
@@ -403,13 +403,13 @@ void test_last_after_remove_last()
     ioopm_list_append(l, int_elem(40));
 
     ioopm_list_remove(l, 3);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(30).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 30);
 
     ioopm_list_remove(l, 2);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 20);
 
     ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -420,20 +420,20 @@ void test_last_after_remove_not_last()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_append(l, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 10);
 
     ioopm_list_append(l, int_elem(20));
     ioopm_list_append(l, int_elem(30));
     ioopm_list_append(l, int_elem(40));
 
     ioopm_list_remove(l, 0);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(40).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 40);
 
     ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(40).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 40);
 
     ioopm_list_remove(l, 1);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 20);
 
     ioopm_list_destroy(l);
 }
@@ -444,7 +444,7 @@ void test_insert_once()
     ioopm_list_t *l = ioopm_list_create();
 
     ioopm_list_insert(l, 0, int_elem(10));
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -455,8 +455,8 @@ void test_insert_twice_first()
 
     ioopm_list_insert(l, 0, int_elem(10));
     ioopm_list_insert(l, 0, int_elem(20));
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(20).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 20);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 10);
 
     ioopm_list_destroy(l);
 }
@@ -467,8 +467,8 @@ void test_insert_twice_last()
 
     ioopm_list_insert(l, 0, int_elem(10));
     ioopm_list_insert(l, 1, int_elem(20));
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(10).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 10);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 20);
 
     ioopm_list_destroy(l);
 }
@@ -483,15 +483,15 @@ void test_insert_many_times()
         ioopm_list_insert(l, random_index, elem);
     }
 
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 20);
 
     ioopm_list_insert(l, 0, int_elem(1001));
     ioopm_list_insert(l, 13, int_elem(1002));
     ioopm_list_insert(l, 22, int_elem(1003));
 
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(1001).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 13).i, int_elem(1002).i);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(1003).i);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 1001);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 13).i, 1002);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 1003);
 
     ioopm_list_destroy(l);
 }
@@ -505,17 +505,17 @@ void test_insert_append_prepend()
     ioopm_list_append(l, int_elem(20));
     ioopm_list_prepend(l, int_elem(1));
 
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(1).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, int_elem(10).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 2).i, int_elem(20).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 1);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 1).i, 10);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 2).i, 20);
 
     ioopm_list_prepend(l, int_elem(4));
     ioopm_list_append(l, int_elem(30));
     ioopm_list_insert(l, 3, int_elem(15));
 
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 3).i, int_elem(15).i);
-    CU_ASSERT_EQUAL(ioopm_list_last(l).i, int_elem(30).i);
-    CU_ASSERT_EQUAL(ioopm_list_head(l).i, int_elem(4).i);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 3).i, 15);
+    CU_ASSERT_EQUAL(ioopm_list_last(l).i, 30);
+    CU_ASSERT_EQUAL(ioopm_list_head(l).i, 4);
 
     ioopm_list_destroy(l);
 }
@@ -529,16 +529,16 @@ void test_insert_remove()
     ioopm_list_insert(l, 0, int_elem(20));
     ioopm_list_insert(l, 1, int_elem(30));
 
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, int_elem(20).i);
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 1).i, int_elem(10).i);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, 20);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 1).i, 10);
 
     ioopm_list_insert(l, 1, int_elem(40));
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(2).i);
-    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, int_elem(30).i);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 2);
+    CU_ASSERT_EQUAL(ioopm_list_get(l, 0).i, 30);
 
     ioopm_list_remove(l, 0);
-    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, int_elem(40).i);
-    CU_ASSERT_EQUAL(ioopm_list_size(l), int_elem(0).i);
+    CU_ASSERT_EQUAL(ioopm_list_remove(l, 0).i, 40);
+    CU_ASSERT_EQUAL(ioopm_list_size(l), 0);
 
     ioopm_list_destroy(l);
 }
@@ -567,71 +567,71 @@ int main()
 	// the test in question. If you want to add another test, just
 	// copy a line below and change the information
 	if (
-		(CU_add_test(my_test_suite, "Test test                                          ", 
+		(CU_add_test(my_test_suite, "Test test                                          ",
                      test_test) == NULL) ||
-        (CU_add_test(my_test_suite, "[Create/Destroy] Create and destroy.               ", 
+        (CU_add_test(my_test_suite, "[Create/Destroy] Create and destroy.               ",
                      test_create_destroy) == NULL) ||
-		(CU_add_test(my_test_suite, "[Is Empty] Empty.                                  ", 
+		(CU_add_test(my_test_suite, "[Is Empty] Empty.                                  ",
                      test_is_empty_on_empty) == NULL) ||
-		(CU_add_test(my_test_suite, "[Is Empty / Append] Singleton.                     ", 
+		(CU_add_test(my_test_suite, "[Is Empty / Append] Singleton.                     ",
                      test_is_empty_on_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Append / Get] Singleton.                          ", 
+		(CU_add_test(my_test_suite, "[Append / Get] Singleton.                          ",
                      test_append_get_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Append / Get] Twice.                              ", 
+		(CU_add_test(my_test_suite, "[Append / Get] Twice.                              ",
                      test_append_get_twice) == NULL) ||
-		(CU_add_test(my_test_suite, "[Append / Get] Many times.                         ", 
+		(CU_add_test(my_test_suite, "[Append / Get] Many times.                         ",
                      test_get_append_many_times) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend] Once.                                    ", 
+		(CU_add_test(my_test_suite, "[Prepend] Once.                                    ",
                      test_prepend_once) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend] Twice.                                   ", 
+		(CU_add_test(my_test_suite, "[Prepend] Twice.                                   ",
                      test_prepend_twice) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend] Many times.                              ", 
+		(CU_add_test(my_test_suite, "[Prepend] Many times.                              ",
                      test_prepend_many_times) == NULL) ||
-		(CU_add_test(my_test_suite, "[Prepend / Append] A few times.                    ", 
+		(CU_add_test(my_test_suite, "[Prepend / Append] A few times.                    ",
                      test_append_and_prepend) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove] Singleton.                                ", 
+		(CU_add_test(my_test_suite, "[Remove] Singleton.                                ",
                      test_remove_on_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove] Multple values.                           ", 
+		(CU_add_test(my_test_suite, "[Remove] Multple values.                           ",
                      test_remove_on_multiple_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove / Append] Append after remove.             ", 
+		(CU_add_test(my_test_suite, "[Remove / Append] Append after remove.             ",
                      test_append_after_remove) == NULL) ||
-		(CU_add_test(my_test_suite, "[Remove / Prepend] Prepend after remove.           ", 
+		(CU_add_test(my_test_suite, "[Remove / Prepend] Prepend after remove.           ",
                      test_prepend_remove) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] Empty.                                      ", 
+		(CU_add_test(my_test_suite, "[Size] Empty.                                      ",
                      test_size_empty) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] Singleton.                                  ", 
+		(CU_add_test(my_test_suite, "[Size] Singleton.                                  ",
                      test_size_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] Two values.                                 ", 
+		(CU_add_test(my_test_suite, "[Size] Two values.                                 ",
                      test_size_two_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Size] A lot of values.                            ", 
+		(CU_add_test(my_test_suite, "[Size] A lot of values.                            ",
                      test_size_many_values) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head] Singleton.                                  ", 
+		(CU_add_test(my_test_suite, "[Head] Singleton.                                  ",
                      test_head_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head] After remove first.                         ", 
+		(CU_add_test(my_test_suite, "[Head] After remove first.                         ",
                      test_head_after_remove_first) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head / Remove] After remove one other than first. ", 
+		(CU_add_test(my_test_suite, "[Head / Remove] After remove one other than first. ",
                      test_head_after_remove_not_first) == NULL) ||
-		(CU_add_test(my_test_suite, "[Head / Prepend / Appeend] Multiple values.        ", 
+		(CU_add_test(my_test_suite, "[Head / Prepend / Appeend] Multiple values.        ",
                      test_head_prepend_append) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last] Singleton.                                  ", 
+		(CU_add_test(my_test_suite, "[Last] Singleton.                                  ",
                      test_last_singleton) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last] After remove last.                          ", 
+		(CU_add_test(my_test_suite, "[Last] After remove last.                          ",
                      test_last_after_remove_last) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last / Remove] After remove one other than last.  ", 
+		(CU_add_test(my_test_suite, "[Last / Remove] After remove one other than last.  ",
                      test_last_after_remove_not_last) == NULL) ||
-		(CU_add_test(my_test_suite, "[Last / Prepend / Appeend] Multiple values.        ", 
+		(CU_add_test(my_test_suite, "[Last / Prepend / Appeend] Multiple values.        ",
                      test_last_prepend_append) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Once.                                     ", 
+        (CU_add_test(my_test_suite, "[Insert] Once.                                     ",
                      test_insert_once) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Twice first.                              ", 
+        (CU_add_test(my_test_suite, "[Insert] Twice first.                              ",
                      test_insert_twice_first) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Twice last.                               ", 
+        (CU_add_test(my_test_suite, "[Insert] Twice last.                               ",
                      test_insert_twice_last) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert] Many values.                              ", 
+        (CU_add_test(my_test_suite, "[Insert] Many values.                              ",
                      test_insert_many_times) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert / Prepend / Append] Multiple values.       ", 
+        (CU_add_test(my_test_suite, "[Insert / Prepend / Append] Multiple values.       ",
                      test_insert_append_prepend) == NULL) ||
-        (CU_add_test(my_test_suite, "[Insert / Remove] A few values.                    ", 
+        (CU_add_test(my_test_suite, "[Insert / Remove] A few values.                    ",
                      test_insert_remove) == NULL) ||
 		0)
 	{
