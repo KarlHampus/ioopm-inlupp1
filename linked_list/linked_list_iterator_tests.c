@@ -54,7 +54,7 @@ void test_at_end_singleton()
 {
 	ioopm_list_t *l = ioopm_list_create();
 
-	ioopm_list_append(l, 1);
+	ioopm_list_append(l, int_elem(1));
 
 	ioopm_list_iterator_t *it = ioopm_list_iterator_create(l);
 
@@ -76,7 +76,7 @@ void test_advance_at_end_many_times()
 	// Add a lot of elements
 	for (int i = 0; i < 100; i++)
 	{
-		ioopm_list_prepend(l, i);
+		ioopm_list_prepend(l, int_elem(i));
 	}
 
 	ioopm_list_iterator_t *it = ioopm_list_iterator_create(l);
@@ -84,8 +84,7 @@ void test_advance_at_end_many_times()
 	// Advance through the whole list and check at every 30th element
 	for (int i = 0; i < 100; i++)
 	{
-		if (i % 30 == 0)
-			CU_ASSERT_FALSE(ioopm_list_iterator_at_end(it));
+		if (i % 30 == 0) CU_ASSERT_FALSE(ioopm_list_iterator_at_end(it));
 		ioopm_list_iterator_advance(it);
 	}
 
@@ -101,16 +100,16 @@ void test_advance_at_end_many_times()
 void test_iterator_current()
 {
 	ioopm_list_t *lst = ioopm_list_create();
-	ioopm_list_append(lst, 1);
-	ioopm_list_append(lst, 2);
-	ioopm_list_append(lst, 3);
+	ioopm_list_append(lst, int_elem(1));
+	ioopm_list_append(lst, int_elem(2));
+	ioopm_list_append(lst, int_elem(3));
 	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
 
-	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 1);
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it).i, 1);
 	ioopm_list_iterator_advance(it);
-	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 2);
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it).i, 2);
 	ioopm_list_iterator_advance(it);
-	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 3);
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it).i, 3);
 
 	ioopm_list_iterator_destroy(it);
 	ioopm_list_destroy(lst);
@@ -120,17 +119,17 @@ void test_iterator_insert()
 {
 
 	ioopm_list_t *lst = ioopm_list_create();
-	ioopm_list_append(lst, 1);
-	ioopm_list_append(lst, 2);
-	ioopm_list_append(lst, 3);
+	ioopm_list_append(lst, int_elem(1));
+	ioopm_list_append(lst, int_elem(2));
+	ioopm_list_append(lst, int_elem(3));
 	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
 
 	ioopm_list_iterator_advance(it); // 2
 
-	ioopm_list_iterator_insert(it, 150);				 // Insert 150 between 1 and 2
-	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 2); // Make sure we're still at the same index
+	ioopm_list_iterator_insert(it, int_elem(150));				 // Insert 150 between 1 and 2
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it).i, 2); // Make sure we're still at the same index
 	CU_ASSERT_EQUAL(ioopm_list_size(lst), 4);			 // Make sure a new element was inserted.
-	CU_ASSERT_EQUAL(ioopm_list_get(lst, 1), 150);		 // Make sure the 2nd element is 150
+	CU_ASSERT_EQUAL(ioopm_list_get(lst, 1).i, 150);		 // Make sure the 2nd element is 150
 
 	ioopm_list_iterator_destroy(it);
 	ioopm_list_destroy(lst);
@@ -140,9 +139,9 @@ void test_iterator_remove()
 {
 	// Create list [1, 2, 3]
 	ioopm_list_t *lst = ioopm_list_create();
-	ioopm_list_append(lst, 1);
-	ioopm_list_append(lst, 2);
-	ioopm_list_append(lst, 3);
+	ioopm_list_append(lst, int_elem(1));
+	ioopm_list_append(lst, int_elem(2));
+	ioopm_list_append(lst, int_elem(3));
 	ioopm_list_iterator_t *it = ioopm_list_iterator_create(lst);
 
 	ioopm_list_iterator_advance(it); // 2
@@ -150,7 +149,7 @@ void test_iterator_remove()
 	// Remove an element in the middle
 	ioopm_list_iterator_remove(it); // Remove number 2
 
-	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it), 3); // Make sure we're at the next index
+	CU_ASSERT_EQUAL(ioopm_list_iterator_current(it).i, 3); // Make sure we're at the next index
 	CU_ASSERT_EQUAL(ioopm_list_size(lst), 2);			 // Make sure the size reflects the change
 
 	// Remove an element at the end
@@ -159,8 +158,8 @@ void test_iterator_remove()
 	CU_ASSERT(ioopm_list_iterator_at_end(it)); // Make sure we're at the end
 	CU_ASSERT_EQUAL(ioopm_list_size(lst), 1);  // Make sure the size reflects the change
 
-	CU_ASSERT_EQUAL(ioopm_list_get(lst, 0), 1); // Make sure the remaining element is the number 1
-	
+	CU_ASSERT_EQUAL(ioopm_list_get(lst, 0).i, 1); // Make sure the remaining element is the number 1
+
 	ioopm_list_iterator_destroy(it);
 	ioopm_list_destroy(lst);
 }
