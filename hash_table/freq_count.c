@@ -4,6 +4,7 @@
 #include <string.h>
 #include "hash_table.h"
 #include "hash_table_iterator.h"
+#include "../common.h"
 
 #define Delimiters "+-#@()[]{}.,:;!? \t\n\r"
 
@@ -13,10 +14,13 @@
 void process_word(char *word, ioopm_hash_table_t *ht)
 {
 	// FIXME: Rewrite to match your own interface, error-handling, etc.
-	int freq = 0;
-	ioopm_hash_table_lookup(ht, word, &freq);
+	elem_t freq = int_elem(0);
+	elem_t key = string_elem(word);
+	ioopm_hash_table_lookup(ht, key, &freq);
 
-	ioopm_hash_table_insert(ht, word, freq + 1);
+	if (freq.i == 0) key = string_elem(strdup(word));
+
+	ioopm_hash_table_insert(ht, key, int_elem(freq.i + 1));
 }
 
 /// @brief Process a single file, updating the frequencies of its words
@@ -26,7 +30,7 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
 {
 	printf("Filename: %s\n", filename);
 	FILE *f = fopen(filename, "r");
-	
+
 	do
 	{
 		char *buf = NULL;
@@ -81,8 +85,8 @@ void add_elements_from_ht_to_array(ioopm_hash_table_t *ht, struct freq_word word
 	while (!ioopm_hash_table_iterator_at_end(it))
 	{
 		struct freq_word f_word = {
-			.freq = ioopm_hash_table_iterator_current_value(it),
-			.word = ioopm_hash_table_iterator_current_key(it)
+			.freq = ioopm_hash_table_iterator_current_value(it).i,
+			.word = ioopm_hash_table_iterator_current_key(it).s
 		};
 
 		*words = f_word;
@@ -110,7 +114,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(101);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(101, &string_hash, &string_equal);
+	ioopm_set_on_destroy_entry(ht, &string_key_destroy);
 
 	for (int i = 1; i < argc; ++i)
 	{

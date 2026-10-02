@@ -3,6 +3,25 @@
 #include <string.h>
 #include "hash_table.h"
 #include "hash_table_iterator.h"
+#include "../common.h"
+
+static void get_five_keys(elem_t elems[5])
+{
+	char *strs[5] = {"aa", "ab", "ac", "xc", "psldkoejdob"};
+
+	for (int i = 0; i < 5; i++)
+	{
+		elems[i] = string_elem(strs[i]);
+	}
+}
+
+static void get_five_values(elem_t elems[5])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		elems[i] = int_elem(i + 1);
+	}
+}
 
 int init_suite(void)
 {
@@ -23,7 +42,7 @@ int clean_suite(void)
 // Iterating over an empty hash table
 void test_iterating_empty_table()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(2);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &string_hash, &string_equal);
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
 
 	CU_ASSERT_TRUE(ioopm_hash_table_iterator_at_end(it));
@@ -35,18 +54,18 @@ void test_iterating_empty_table()
 // Iterating over a hash table with one entry
 void test_iterating_singleton_ht()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(2);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &string_hash, &string_equal);
 
-	char *key = "abc";
-	int val = 123;
+	elem_t key = string_elem("abc");
+	elem_t value = int_elem(123);
 
-	ioopm_hash_table_insert(ht, key, val);
+	ioopm_hash_table_insert(ht, key, value);
 
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
 
 	CU_ASSERT_FALSE(ioopm_hash_table_iterator_at_end(it));
-	CU_ASSERT_TRUE(strcmp(ioopm_hash_table_iterator_current_key(it), key) == 0);
-	CU_ASSERT_EQUAL(ioopm_hash_table_iterator_current_value(it), val);
+	CU_ASSERT_TRUE(string_equal(ioopm_hash_table_iterator_current_key(it), key));
+	CU_ASSERT_EQUAL(ioopm_hash_table_iterator_current_value(it).i, value.i);
 
 	ioopm_hash_table_iterator_destroy(it);
 	ioopm_hash_table_destroy(ht);
@@ -55,10 +74,12 @@ void test_iterating_singleton_ht()
 // Iterating over a hash table with several entries
 void test_iterating_ht_multiple_values()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(17);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
 
-	char *keys[5] = {"aa", "ab", "ac", "xh", "psldkoejdob"};
-	int values[5] = {1, 2, 3, 4, 5};
+	elem_t keys[5];
+	elem_t values[5];
+	get_five_keys(keys);
+	get_five_values(values);
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -89,11 +110,13 @@ void test_iterating_ht_multiple_values()
 // Making sure that every inserted key-value pair is visited exactly once
 void test_every_key_value_pair_visited_exactly_once()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(17);
-	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17, &string_hash, &string_equal);
 
-	char *keys[5] = {"aa", "ab", "ac", "xh", "psldkoejdob"};
-	int values[5] = {1, 2, 3, 4, 5};
+	elem_t keys[5];
+	elem_t values[5];
+	get_five_keys(keys);
+	get_five_values(values);
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -108,14 +131,14 @@ void test_every_key_value_pair_visited_exactly_once()
 	int safety_line = 10;
 	while (!ioopm_hash_table_iterator_at_end(it) && safety_line > 0)
 	{
-		char *cur_key = ioopm_hash_table_iterator_current_key(it);
+		elem_t cur_key = ioopm_hash_table_iterator_current_key(it);
 
 		// Check that the control table has the same key
 		CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht_control, cur_key));
 
 		// Remove the key from the control table to ensure there are
 		// no dups in the future checks
-		int result = 0;
+		elem_t result = int_elem(0);
 		ioopm_hash_table_remove(ht_control, cur_key, &result);
 
 		// Advance iterator and decrease safety line
@@ -134,11 +157,13 @@ void test_every_key_value_pair_visited_exactly_once()
 void test_iterating_elements_in_same_bucket()
 {
 	// Creating a hashtable of size 2, many elements will be in the same bucket.
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(2);
-	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17, &string_hash, &string_equal);
 
-	char *keys[5] = {"aa", "ab", "ac", "xh", "psldkoejdob"};
-	int values[5] = {1, 2, 3, 4, 5};
+	elem_t keys[5];
+	elem_t values[5];
+	get_five_keys(keys);
+	get_five_values(values);
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -153,14 +178,14 @@ void test_iterating_elements_in_same_bucket()
 	int safety_line = 10;
 	while (!ioopm_hash_table_iterator_at_end(it) && safety_line > 0)
 	{
-		char *cur_key = ioopm_hash_table_iterator_current_key(it);
+		elem_t cur_key = ioopm_hash_table_iterator_current_key(it);
 
 		// Check that the control table has the same key
 		CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht_control, cur_key));
 
 		// Remove the key from the control table to ensure there are
 		// no dups in the future checks
-		int result = 0;
+		elem_t result = int_elem(0);
 		ioopm_hash_table_remove(ht_control, cur_key, &result);
 
 		// Advance iterator and decrease safety line
