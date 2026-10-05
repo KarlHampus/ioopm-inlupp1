@@ -1,6 +1,5 @@
 CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic
-TESTFILE=linked_list_iterator_tests
 DEPENDENCIES=linked_list.o linked_list_iterator.o ../common.o
 
 all: linked_list_tests linked_list_iterator_tests
@@ -21,8 +20,10 @@ clean:
 	rm -f linked_list_tests linked_list_iterator_tests
 	rm -f *.gcda *.gcno *.gcov
 
-test: $(TESTFILE)
-	./$(TESTFILE)
+TEST_SOURCES := $(wildcard *_tests.c)
+TESTS := $(TEST_SOURCES:.c=)
+test: $(TESTS)
+	@for test in $(TESTS); do ./$$test; done
 
 memtest: $(TESTFILE)
 	valgrind --leak-check=full ./$(TESTFILE)

@@ -1,6 +1,5 @@
 CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic
-TESTFOLDER=linked_list
 
 all:
 	make -C hash_table/ all
@@ -14,11 +13,13 @@ clean:
 	rm -f *.gcda *.gcno *.gcov
 
 test:
-	make -C $(TESTFOLDER)/ test
-	@make clean -s
+	@make -C linked_list/ test
+	@make -C hash_table/ test
+#	@make clean -s
 
 memtest:
-	make -C $(TESTFOLDER)/ memtest
-	@make clean -s
+	make -C linked_list/ memtest
+	make -C hash_table/ memtest
+#	@make clean -s
 
 .PHONY: test clean memtest all

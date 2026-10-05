@@ -1,6 +1,5 @@
 CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic
-TESTFILE=hash_table_tests
 DEPENDENCIES=hash_table_iterator.o hash_table.o ../common.o
 
 all: hash_table_iterator_tests freq_count hash_table_tests
@@ -21,8 +20,10 @@ clean:
 	rm -f hash_table_tests hash_table_iterator_tests freq_count
 	rm -f *.gcda *.gcno *.gcov
 
-test: $(TESTFILE)
-	./$(TESTFILE)
+TEST_SOURCES := $(wildcard *_tests.c)
+TESTS := $(TEST_SOURCES:.c=)
+test: $(TESTS)
+	@for test in $(TESTS); do ./$$test; done
 
 memtest: $(TESTFILE)
 	valgrind --leak-check=full ./$(TESTFILE)
