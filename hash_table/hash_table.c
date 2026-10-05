@@ -12,7 +12,7 @@
 static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)
 {
     entry_t *new = malloc(sizeof(entry_t));
-    new->key = key; // Maybe move strdup to insert
+    new->key = key;
     new->value = value;
     new->next = next;
     return new;
@@ -24,11 +24,10 @@ static void entry_destroy(entry_t *entry, ioopm_hash_table_t *ht)
     free(entry);
 }
 
-static entry_t **find_previous_ptr(const ioopm_hash_table_t *ht, const elem_t key)
+static entry_t **find_pointer_to_entry(const ioopm_hash_table_t *ht, const elem_t key)
 {
     size_t bucket = ht->hash_function(key) % ht->bucket_size;
 
-    // look for an entry with the key we want
     entry_t **previous = &ht->buckets[bucket];
 
     while (*previous != NULL && !ht->key_equal_function((*previous)->key, key))
@@ -90,40 +89,38 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
     return;
 }
 
-// Remove const
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, elem_t value)
 {
-    entry_t **previous = find_previous_ptr(ht, key); // find bucket.
+    entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
 
     // if the key exists, update the value, otherwise, add a new entry to the end of the list
-    if (*previous != NULL)
+    if (*pointer_to_entry != NULL)
     {
-        (*previous)->value = value;
+        (*pointer_to_entry)->value = value;
     }
     else
     {
-        *previous = entry_create(key, value, NULL);
+        *pointer_to_entry = entry_create(key, value, NULL);
         ht->size++;
     }
 }
 
 bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, const elem_t key, elem_t *result)
 {
-    // look for an entry with the key we want
-    entry_t **previous = find_previous_ptr(ht, key);
+    entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
-    if ((*previous) != NULL)
+    if ((*pointer_to_entry) != NULL)
     {
-        entry_t *to_remove = *previous;
+        entry_t *to_remove = *pointer_to_entry;
 
         // relink
-        *previous = to_remove->next;
+        *pointer_to_entry = to_remove->next;
 
         // Save removed value
         *result = to_remove->value;
 
-        // Free value memory
+        // Free entry memory
         entry_destroy(to_remove, ht);
         ht->size--;
         return true;
@@ -136,13 +133,12 @@ bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, const elem_t key, elem_t *r
 
 bool ioopm_hash_table_lookup(const ioopm_hash_table_t *ht, const elem_t key, elem_t *result)
 {
-    // look for an entry with the key we want
-    entry_t **previous = find_previous_ptr(ht, key);
+    entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
-    if (*previous != NULL)
+    if (*pointer_to_entry != NULL)
     {
-        *result = (*previous)->value;
+        *result = (*pointer_to_entry)->value;
         return true;
     }
     else
@@ -153,9 +149,8 @@ bool ioopm_hash_table_lookup(const ioopm_hash_table_t *ht, const elem_t key, ele
 
 bool ioopm_hash_table_has_key(const ioopm_hash_table_t *ht, const elem_t key)
 {
-    // look for an entry with the key we want
-    entry_t **previous = find_previous_ptr(ht, key);
-    return *previous != NULL; // Key exists.
+    entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
+    return *pointer_to_entry != NULL;
 }
 
 bool ioopm_hash_table_is_empty(const ioopm_hash_table_t *ht)

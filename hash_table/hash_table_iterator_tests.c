@@ -42,7 +42,7 @@ int clean_suite(void)
 // Iterating over an empty hash table
 void test_iterating_empty_table()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &ioopm_string_hash, &ioopm_string_equal);
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
 
 	CU_ASSERT_TRUE(ioopm_hash_table_iterator_at_end(it));
@@ -54,7 +54,7 @@ void test_iterating_empty_table()
 // Iterating over a hash table with one entry
 void test_iterating_singleton_ht()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &ioopm_string_hash, &ioopm_string_equal);
 
 	elem_t key = string_elem("abc");
 	elem_t value = int_elem(123);
@@ -64,7 +64,7 @@ void test_iterating_singleton_ht()
 	ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
 
 	CU_ASSERT_FALSE(ioopm_hash_table_iterator_at_end(it));
-	CU_ASSERT_TRUE(string_equal(ioopm_hash_table_iterator_current_key(it), key));
+	CU_ASSERT_TRUE(ioopm_string_equal(ioopm_hash_table_iterator_current_key(it), key));
 	CU_ASSERT_EQUAL(ioopm_hash_table_iterator_current_value(it).i, value.i);
 
 	ioopm_hash_table_iterator_destroy(it);
@@ -74,7 +74,7 @@ void test_iterating_singleton_ht()
 // Iterating over a hash table with several entries
 void test_iterating_ht_multiple_values()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
 	elem_t keys[5];
 	elem_t values[5];
@@ -110,8 +110,8 @@ void test_iterating_ht_multiple_values()
 // Making sure that every inserted key-value pair is visited exactly once
 void test_every_key_value_pair_visited_exactly_once()
 {
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
-	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
+	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
 	elem_t keys[5];
 	elem_t values[5];
@@ -157,8 +157,8 @@ void test_every_key_value_pair_visited_exactly_once()
 void test_iterating_elements_in_same_bucket()
 {
 	// Creating a hashtable of size 2, many elements will be in the same bucket.
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &string_hash, &string_equal);
-	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17, &string_hash, &string_equal);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(2, &ioopm_string_hash, &ioopm_string_equal);
+	ioopm_hash_table_t *ht_control = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
 	elem_t keys[5];
 	elem_t values[5];

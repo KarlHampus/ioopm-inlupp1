@@ -33,7 +33,7 @@ static void insert_and_assert_correct(ioopm_hash_table_t *ht, elem_t key, elem_t
 // Create and destroy
 void test_create_destroy()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
     CU_ASSERT_PTR_NOT_NULL(ht);
     ioopm_hash_table_destroy(ht);
 }
@@ -41,11 +41,11 @@ void test_create_destroy()
 void test_create_destroy_different_sizes()
 {
     // Create the tables
-    ioopm_hash_table_t *ht1 = ioopm_hash_table_create(1, &string_hash, &string_equal);
-    ioopm_hash_table_t *ht2 = ioopm_hash_table_create(10, &string_hash, &string_equal);
-    ioopm_hash_table_t *ht3 = ioopm_hash_table_create(25, &string_hash, &string_equal);
-    ioopm_hash_table_t *ht4 = ioopm_hash_table_create(100, &string_hash, &string_equal);
-    ioopm_hash_table_t *ht5 = ioopm_hash_table_create(5000, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht1 = ioopm_hash_table_create(1, &ioopm_string_hash, &ioopm_string_equal);
+    ioopm_hash_table_t *ht2 = ioopm_hash_table_create(10, &ioopm_string_hash, &ioopm_string_equal);
+    ioopm_hash_table_t *ht3 = ioopm_hash_table_create(25, &ioopm_string_hash, &ioopm_string_equal);
+    ioopm_hash_table_t *ht4 = ioopm_hash_table_create(100, &ioopm_string_hash, &ioopm_string_equal);
+    ioopm_hash_table_t *ht5 = ioopm_hash_table_create(5000, &ioopm_string_hash, &ioopm_string_equal);
 
     // Check that they are pointing to something
     CU_ASSERT_PTR_NOT_NULL(ht1);
@@ -66,7 +66,7 @@ void test_create_destroy_different_sizes()
 void test_lookup_on_empty_table()
 {
     // create new hash table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("abc");
 
@@ -80,7 +80,7 @@ void test_lookup_on_empty_table()
 
 void test_lookup_on_singleton()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(40, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(40, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("abc");
     elem_t value = int_elem(123);
@@ -99,7 +99,7 @@ void test_lookup_on_singleton()
 
 void test_lookup_on_table_with_two_elements()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(4, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(4, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("abc");
     elem_t key2 = string_elem("abcd");
@@ -125,7 +125,7 @@ void test_lookup_on_table_with_two_elements()
 
 void test_lookup_of_wrong_key_on_table_with_elements()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(3, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(3, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("abc");
     elem_t key2 = string_elem("abcd");
@@ -149,7 +149,7 @@ void test_lookup_of_wrong_key_on_table_with_elements()
 void test_lookup_on_elements_in_same_bucket()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     // All of these keys hash to 4 with No_Buckets = 17
     elem_t key1 = string_elem("Aa");
@@ -185,7 +185,7 @@ void test_lookup_on_elements_in_same_bucket()
 void test_insert_once()
 {
     // create new hash table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(30, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(30, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("abc");
     elem_t value = int_elem(123);
@@ -205,7 +205,7 @@ void test_insert_once()
 void test_insert_already_exisiting_key()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(20, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(20, &ioopm_string_hash, &ioopm_string_equal);
 
     // Initial key value pairs
     elem_t key = string_elem("abc");
@@ -223,7 +223,7 @@ void test_insert_already_exisiting_key()
 void test_insert_already_existing_key_into_ht_with_values()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("abc");
     elem_t key2 = string_elem("abcd");
@@ -251,7 +251,7 @@ void test_insert_already_existing_key_into_ht_with_values()
 void test_insert_two_elements_with_same_key_adress_different_values()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("a");
     elem_t initial_key = string_elem(strdup(key.s));
@@ -280,7 +280,7 @@ void test_insert_two_elements_with_same_key_adress_different_values()
 // Remove
 void test_remove_entry_empty_ht()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     // Test removing a non existing key
     elem_t result = int_elem(0);
@@ -293,7 +293,7 @@ void test_remove_entry_empty_ht()
 void test_remove_one_entry()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(5, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(5, &ioopm_string_hash, &ioopm_string_equal);
 
     // Initial key value pairs
     elem_t key = string_elem("abc");
@@ -316,7 +316,7 @@ void test_remove_one_entry()
 void test_removing_one_entry_with_multiple_values_in_ht()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &ioopm_string_hash, &ioopm_string_equal);
 
     // Initial key value pairs
     elem_t key = string_elem("abc");
@@ -355,7 +355,7 @@ void test_removing_one_entry_with_multiple_values_in_ht()
 void test_removing_from_same_bucket()
 {
     // Creates a new hash_table
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     // All of these keys hash to 4 with No_Buckets = 17
     elem_t key1 = string_elem("Aa");
@@ -390,7 +390,7 @@ void test_removing_from_same_bucket()
 // Has key
 void test_ht_has_nonexisting_key()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, string_elem("abc")));
 
@@ -399,7 +399,7 @@ void test_ht_has_nonexisting_key()
 
 void test_ht_has_existing_key()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("abc");
     elem_t value = int_elem(92);
@@ -412,7 +412,7 @@ void test_ht_has_existing_key()
 
 void test_ht_has_multiple_keys()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("abc");
     elem_t key2 = string_elem("abcd");
@@ -435,7 +435,7 @@ void test_ht_has_multiple_keys()
 void test_ht_has_removed_key()
 {
 
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key = string_elem("abc");
     elem_t value = int_elem(92);
@@ -451,7 +451,7 @@ void test_ht_has_removed_key()
 
 void test_ht_has_one_removed_two_remaining_keys()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("abc");
     elem_t key2 = string_elem("abcd");
@@ -477,7 +477,7 @@ void test_ht_has_one_removed_two_remaining_keys()
 // Size
 void test_size_of_empty_ht()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
 
@@ -486,7 +486,7 @@ void test_size_of_empty_ht()
 
 void test_size_of_singleton_ht()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(5, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(5, &ioopm_string_hash, &ioopm_string_equal);
 
     ioopm_hash_table_insert(ht, string_elem("abc"), int_elem(1));
 
@@ -497,7 +497,7 @@ void test_size_of_singleton_ht()
 
 void test_size_of_two_element_ht()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &ioopm_string_hash, &ioopm_string_equal);
 
     ioopm_hash_table_insert(ht, string_elem("abc"), int_elem(1));
     ioopm_hash_table_insert(ht, string_elem("abcd"), int_elem(2));
@@ -509,7 +509,7 @@ void test_size_of_two_element_ht()
 
 void test_size_of_two_element_same_bucket_ht()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     // Same bucket for 17 buckets !!!!
     ioopm_hash_table_insert(ht, string_elem("Aa"), int_elem(1));
@@ -522,7 +522,7 @@ void test_size_of_two_element_same_bucket_ht()
 
 void test_size_of_ht_after_one_remove()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     ioopm_hash_table_insert(ht, string_elem("abc"), int_elem(1));
     ioopm_hash_table_insert(ht, string_elem("abcd"), int_elem(2));
@@ -538,7 +538,7 @@ void test_size_of_ht_after_one_remove()
 
 void test_size_of_ht_after_remove_of_last_element()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(300, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(300, &ioopm_string_hash, &ioopm_string_equal);
 
     ioopm_hash_table_insert(ht, string_elem("abc"), int_elem(1));
 
@@ -552,8 +552,8 @@ void test_size_of_ht_after_remove_of_last_element()
 
 void test_size_of_ht_after_many_inserts()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(1000, &string_hash, &string_equal);
-    ioopm_set_on_destroy_entry(ht, &string_key_destroy);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(1000, &ioopm_string_hash, &ioopm_string_equal);
+    ioopm_set_on_destroy_entry(ht, &ioopm_string_key_destroy);
 
     int total_inserts = 0;
     char key[4];
@@ -583,7 +583,7 @@ void test_size_of_ht_after_many_inserts()
 // Is empty
 void test_empty_hash_table_is_empty()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
     CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
 
     ioopm_hash_table_destroy(ht);
@@ -591,7 +591,7 @@ void test_empty_hash_table_is_empty()
 
 void test_singleton_hash_table_is_not_empty()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(10, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("key1");
     elem_t value1 = int_elem(123);
@@ -604,7 +604,7 @@ void test_singleton_hash_table_is_not_empty()
 
 void test_larger_hash_table_is_not_empty()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("key1");
     elem_t key2 = string_elem("key2");
@@ -623,7 +623,7 @@ void test_larger_hash_table_is_not_empty()
 
 void test_hash_table_insert_then_remove_is_empty()
 {
-    ioopm_hash_table_t *ht = ioopm_hash_table_create(20, &string_hash, &string_equal);
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(20, &ioopm_string_hash, &ioopm_string_equal);
 
     elem_t key1 = string_elem("key1");
     elem_t value1 = int_elem(123);

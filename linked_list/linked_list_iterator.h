@@ -7,10 +7,12 @@ typedef struct list_iterator ioopm_list_iterator_t;
 
 /// @brief Create a new iterator
 /// @param l the list to iterate over
+/// @note borrows the list
 ioopm_list_iterator_t *ioopm_list_iterator_create(ioopm_list_t *l);
 
 /// @brief Destroy the iterator and return its resources
 /// @param iter the iterator
+/// @note does not free/destroy the list
 void ioopm_list_iterator_destroy(ioopm_list_iterator_t *iter);
 
 /// @brief Checks if there are more elements to iterate over

@@ -17,11 +17,13 @@ void ioopm_list_destroy(ioopm_list_t *list);
 /// @brief Insert at the end of a linked list in O(1) time
 /// @param list the linked list that will be appended
 /// @param elem the elem to be appended
+/// @note borows elem
 void ioopm_list_append(ioopm_list_t *list, elem_t elem);
 
 /// @brief Insert at the front of a linked list in O(1) time
 /// @param list the linked list that will be prepended to
 /// @param elem the elem to be prepended
+/// @note borows elem
 void ioopm_list_prepend(ioopm_list_t *list, elem_t elem);
 
 /// @brief Return the first element of a linked list in O(1) time
@@ -42,6 +44,7 @@ elem_t ioopm_list_last(const ioopm_list_t *list);
 /// @param list the linked list that will be extended
 /// @param index the position in the list
 /// @param elem the elem to be inserted
+/// @note borows elem
 void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem);
 
 /// @brief Remove an element from a linked list in O(n) time.

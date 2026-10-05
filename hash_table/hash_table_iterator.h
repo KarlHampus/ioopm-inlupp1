@@ -16,9 +16,10 @@
 
 typedef struct hash_table_iterator ioopm_hash_table_iterator_t;
 
-/// @brief Create an iterator for a hash table.
+/// @brief Create an iterator for a hash table
 /// @param ht hash table to iterate over
 /// @return a new iterator positioned at the first entry if it exists, and positioned at-the-end if ht is empty
+/// @note this only borrows the ht
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht);
 
 /// @brief Destroy an iterator and free its memory
