@@ -17,18 +17,19 @@
 
 typedef struct hash_table ioopm_hash_table_t;
 
-/// @brief Create a new hash table with default on_destroy_entry function as nothing
-///        to destroy
+/// @brief Create a new hash table with the default on_destroy_entry function as nothing
+///        to destroy, which doesn't free anything.
 /// @return A new empty hash table
 ioopm_hash_table_t *ioopm_hash_table_create(size_t bucket_size, ioopm_hash_function *hash_fn,
-    ioopm_eq_function *key_eq_fn);
+                                            ioopm_eq_function *key_eq_fn);
 
 /// @brief sets the on_destroy_entry function in the hashtable which will be called
 //         each time an entry is destroyed
 /// @param ht the hash table
 /// @param on_destroy_entry the on destroy function
+/// @note Passing a destroy function gives the hashtable ownership of its entries.
 void ioopm_set_on_destroy_entry(ioopm_hash_table_t *ht,
-    ioopm_on_destroy_entry_function *on_destroy_entry);
+                                ioopm_on_destroy_entry_function *on_destroy_entry);
 
 /// @brief Delete a hash table and free its memory
 /// @param ht a hash table to be deleted
@@ -38,7 +39,9 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht);
 /// @param ht hash table operated upon
 /// @param key key to insert
 /// @param value value to insert
-void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, elem_t value);
+/// @note The hashtable borrows the key and value UNLESS a destroy function
+///       is passed with ioopm_set_on_destroy_entry, then it takes ownership.
+void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, const elem_t value);
 
 /// @brief lookup value for key in hash table ht
 /// @param ht hash table operated upon
@@ -69,11 +72,3 @@ bool ioopm_hash_table_is_empty(const ioopm_hash_table_t *ht);
 /// @param ht hash table to verify
 /// @return the number of entries stored in the given hashtable.
 size_t ioopm_hash_table_size(const ioopm_hash_table_t *ht);
-
-/// @brief free nothing on entry destroy
-/// @param elem the elem
-void ioopm_nothing_to_destroy(elem_t elem);
-
-/// @brief free string elem on entry destroy
-/// @param elem the elem
-void ioopm_string_elem_destroy(elem_t elem);
