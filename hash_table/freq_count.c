@@ -36,7 +36,11 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
 		char *buf = NULL;
 		size_t len = 0;
 
-		getline(&buf, &len, f);
+		if (getline(&buf, &len, f) == -1)
+		{
+			free(buf);
+			break;
+		}
 
 		for (char *word = strtok(buf, Delimiters);
 			 word && *word;
