@@ -8,6 +8,9 @@ all: hash_table_iterator_tests freq_count hash_table_tests
 freq_count: freq_count.c $(DEPENDENCIES)
 	$(CC) $(FLAGS) $^ -o $@ -lcunit
 
+run_freq_count: freq_count
+	./freq_count ../10k-words.txt
+
 %.o: %.c %.h
 	$(CC) $(FLAGS) $< -c -o $@
 
@@ -31,4 +34,4 @@ test: $(TESTS)
 memtest: $(TESTFILE)
 	valgrind --leak-check=full ./$(TESTFILE)
 
-.PHONY: test clean memtest all
+.PHONY: test clean memtest all run_freq_count
