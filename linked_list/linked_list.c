@@ -164,7 +164,7 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 {
-    assert(list != NULL && index >= 0 && index < list->size);
+    assert(list != NULL && index < list->size);
 
     link_t **pointer_to_link = find_pointer_to_link(&list->first, index);
 

@@ -5,6 +5,9 @@ DEPENDENCIES=hash_table_iterator.o hash_table.o ../common.o
 all: hash_table_iterator_tests freq_count hash_table_tests
 #	./$(TESTFILE)
 
+freq_count: freq_count.c $(DEPENDENCIES)
+	$(CC) $(FLAGS) $^ -o $@ -lcunit
+
 %.o: %.c %.h
 	$(CC) $(FLAGS) $< -c -o $@
 
