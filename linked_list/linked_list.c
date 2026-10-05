@@ -22,6 +22,17 @@ static void link_destroy(link_t *link)
     free(link);
 }
 
+static link_t **find_pointer_to_link_iterative(link_t **start, size_t index)
+{
+    while (*start != NULL && index != 0)
+    {
+        start = &(*start)->next;
+        index--;
+    }
+    
+    return start;
+}
+
 static link_t **find_pointer_to_link(link_t **start, size_t index)
 {
     if (*start == NULL || index == 0)

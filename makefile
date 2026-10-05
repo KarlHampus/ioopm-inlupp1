@@ -1,13 +1,10 @@
 CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic
-TESTFILE=linked_list
+TESTFOLDER=linked_list
 
 all:
 	make -C hash_table/ all
 	make -C linked_list/ all
-
-common.o: common.c common.h
-	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	make -C hash_table/ clean
@@ -17,9 +14,11 @@ clean:
 	rm -f *.gcda *.gcno *.gcov
 
 test:
-	make -C $(TESTFILE)/ test
+	make -C $(TESTFOLDER)/ test
+	@make clean -s
 
 memtest:
-	make -C $(TESTFILE)/ memtest
+	make -C $(TESTFOLDER)/ memtest
+	@make clean -s
 
 .PHONY: test clean memtest all
