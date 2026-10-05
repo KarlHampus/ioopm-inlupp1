@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include "../common.h"
 
 typedef struct entry entry_t;
 
