@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include "linked_list_structs.h"
 
-// Structs
-
 // Static functions
 
 static link_t *link_create(elem_t elem, link_t *next)
@@ -29,7 +27,7 @@ static link_t **find_pointer_to_link_iterative(link_t **start, size_t index)
         start = &(*start)->next;
         index--;
     }
-    
+
     return start;
 }
 
@@ -68,6 +66,7 @@ ioopm_list_t *ioopm_list_create(void)
 
 void ioopm_list_destroy(ioopm_list_t *list)
 {
+    assert(list != NULL);
     if (list->first != NULL)
     {
         ioopm_list_remove(list, 0);
@@ -81,6 +80,7 @@ void ioopm_list_destroy(ioopm_list_t *list)
 
 void ioopm_list_append(ioopm_list_t *list, elem_t value)
 {
+    assert(list != NULL);
     link_t *new = link_create(value, NULL);
 
     if (ioopm_list_is_empty(list))
@@ -98,6 +98,7 @@ void ioopm_list_append(ioopm_list_t *list, elem_t value)
 
 void ioopm_list_prepend(ioopm_list_t *list, elem_t value)
 {
+    assert(list != NULL);
     link_t *new = link_create(value, list->first);
 
     list->first = new;
@@ -112,17 +113,19 @@ void ioopm_list_prepend(ioopm_list_t *list, elem_t value)
 
 elem_t ioopm_list_head(const ioopm_list_t *list)
 {
+    assert(list != NULL);
     return list->first->elem;
 }
 
 elem_t ioopm_list_last(const ioopm_list_t *list)
 {
+    assert(list != NULL);
     return list->last->elem;
 }
 
 void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
 {
-    assert(list->size >= index);
+    assert(list != NULL && list->size >= index);
 
     if (index == 0)
     {
@@ -146,7 +149,7 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
 
 elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 {
-    assert(list->size > index);
+    assert(list != NULL && list->size > index);
 
     if (index == 0)
     {
@@ -161,8 +164,9 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index)
 
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 {
+    assert(list != NULL && index >= 0 && index < list->size);
+
     link_t **pointer_to_link = find_pointer_to_link(&list->first, index);
-    if (*pointer_to_link == NULL) return int_elem(-1);
 
     elem_t result = (*pointer_to_link)->elem;
 
@@ -171,10 +175,12 @@ elem_t ioopm_list_get(ioopm_list_t *list, size_t index)
 
 size_t ioopm_list_size(const ioopm_list_t *list)
 {
+    assert(list != NULL);
     return list->size;
 }
 
 bool ioopm_list_is_empty(const ioopm_list_t *list)
 {
+    assert(list != NULL);
     return ioopm_list_size(list) == 0;
 }

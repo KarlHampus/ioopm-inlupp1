@@ -64,12 +64,14 @@ ioopm_hash_table_t *ioopm_hash_table_create(
 void ioopm_set_on_destroy_entry(ioopm_hash_table_t *ht,
     ioopm_on_destroy_entry_function *on_destroy_entry)
 {
+    assert(ht != NULL);
     ht->on_destroy_entry = on_destroy_entry;
 }
 
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 {
+    assert(ht != NULL);
     for (unsigned int i = 0; i < ht->bucket_size; i++)
     {
         entry_t *current_bucket = ht->buckets[i];
@@ -91,6 +93,7 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, elem_t value)
 {
+    assert(ht != NULL);
     entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
 
     // if the key exists, update the value, otherwise, add a new entry to the end of the list
@@ -107,6 +110,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, elem_t va
 
 bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, const elem_t key, elem_t *result)
 {
+    assert(ht != NULL);
     entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
@@ -133,6 +137,7 @@ bool ioopm_hash_table_remove(ioopm_hash_table_t *ht, const elem_t key, elem_t *r
 
 bool ioopm_hash_table_lookup(const ioopm_hash_table_t *ht, const elem_t key, elem_t *result)
 {
+    assert(ht != NULL);
     entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
 
     // if the key exists, return the value, otherwise, indicate that the lookup failed.
@@ -149,17 +154,20 @@ bool ioopm_hash_table_lookup(const ioopm_hash_table_t *ht, const elem_t key, ele
 
 bool ioopm_hash_table_has_key(const ioopm_hash_table_t *ht, const elem_t key)
 {
+    assert(ht != NULL);
     entry_t **pointer_to_entry = find_pointer_to_entry(ht, key);
     return *pointer_to_entry != NULL;
 }
 
 bool ioopm_hash_table_is_empty(const ioopm_hash_table_t *ht)
 {
+    assert(ht != NULL);
     return ht->size == 0;
 }
 
 size_t ioopm_hash_table_size(const ioopm_hash_table_t *ht)
 {
+    assert(ht != NULL);
     return ht->size;
 }
 
