@@ -31,12 +31,16 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
 	printf("Filename: %s\n", filename);
 	FILE *f = fopen(filename, "r");
 
-	do
+	while (!feof(f))
 	{
 		char *buf = NULL;
 		size_t len = 0;
 
-		getline(&buf, &len, f);
+		if (getline(&buf, &len, f) == -1)
+		{
+			free(buf);
+			break;
+		}
 
 		for (char *word = strtok(buf, Delimiters);
 			 word && *word;
@@ -46,7 +50,7 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
 		}
 
 		free(buf);
-	} while (!feof(f));
+	};
 	fclose(f);
 }
 
