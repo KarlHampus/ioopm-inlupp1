@@ -14,7 +14,7 @@ freq_count: freq_count.c $(DEPENDENCIES)
 %_tests: %_tests.c $(DEPENDENCIES)
 	$(CC) $(FLAGS) $^ -o $@ -lcunit
 
-hahs_table.o: ../common.h
+hash_table.o: ../common.h
 
 hash_table_iterator.o: hash_table.h ../common.h
 
@@ -28,7 +28,7 @@ TESTS := $(TEST_SOURCES:.c=)
 test: $(TESTS)
 	@for test in $(TESTS); do ./$$test; done
 
-memtest: $(TESTFILE)
-	valgrind --leak-check=full ./$(TESTFILE)
+memtest: $(TESTS)
+	@for test in $(TESTS); do valgrind --leak-check=full ./$$test; done
 
 .PHONY: test clean memtest all
