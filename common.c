@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-size_t string_hash(const elem_t elem)
+size_t ioopm_string_hash(const elem_t elem)
 {
     char *str = elem.s;
     size_t result = 0;
@@ -15,12 +15,12 @@ size_t string_hash(const elem_t elem)
     return result;
 }
 
-bool string_equal(const elem_t elem1, const elem_t elem2)
+bool ioopm_string_equal(const elem_t elem1, const elem_t elem2)
 {
     return strcmp(elem1.s, elem2.s) == 0;
 }
 
-void string_key_destroy(elem_t key, elem_t value)
+void ioopm_string_key_destroy(elem_t key, elem_t value)
 {
     free(key.s);
     (void) value;

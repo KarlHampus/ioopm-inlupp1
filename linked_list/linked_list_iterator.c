@@ -13,6 +13,7 @@ struct list_iterator
 
 ioopm_list_iterator_t *ioopm_list_iterator_create(ioopm_list_t *l)
 {
+    assert(l != NULL);
     ioopm_list_iterator_t *it = calloc(1, sizeof(ioopm_list_iterator_t));
     it->list = l;
     it->current = l->first;
@@ -22,16 +23,19 @@ ioopm_list_iterator_t *ioopm_list_iterator_create(ioopm_list_t *l)
 
 void ioopm_list_iterator_destroy(ioopm_list_iterator_t *iter)
 {
+    assert(iter != NULL);
     free(iter);
 }
 
 bool ioopm_list_iterator_at_end(const ioopm_list_iterator_t *iter)
 {
+    assert(iter != NULL);
     return iter->current == NULL;
 }
 
 void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
 {
+    assert(iter != NULL);
     assert(iter->current != NULL);
 
     iter->current = iter->current->next;
@@ -40,12 +44,14 @@ void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter)
 
 elem_t ioopm_list_iterator_current(const ioopm_list_iterator_t *iter)
 {
+    assert(iter != NULL);
     assert(iter->current != NULL);
     return iter->current->elem;
 }
 
 elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
 {
+    assert(iter != NULL);
     assert(iter->current != NULL);
 
     link_t *next = iter->current->next;
@@ -58,6 +64,7 @@ elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter)
 
 void ioopm_list_iterator_insert(ioopm_list_iterator_t *iter, elem_t element)
 {
+    assert(iter != NULL);
     ioopm_list_t *lst = iter->list;
 
     ioopm_list_insert(lst, iter->current_index, element);

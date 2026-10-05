@@ -16,33 +16,40 @@
 
 typedef struct hash_table_iterator ioopm_hash_table_iterator_t;
 
-/// @brief Create an iterator for a hash table.
+/// @brief Create an iterator for a hash table
 /// @param ht hash table to iterate over
 /// @return a new iterator positioned at the first entry if it exists, and positioned at-the-end if ht is empty
+/// @note this only borrows the ht
+/// @note asserts that ht is not null
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht);
 
 /// @brief Destroy an iterator and free its memory
 /// @param it iterator to destroy
+/// @note asserts that it is not null
 void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it);
 
 /// @brief Check if the current element exists, or equivalently, if it is positioned at an entry
 /// @param it iterator operated upon
 /// @return true iff the current element exists
+/// @note asserts that it is not null
 bool ioopm_hash_table_iterator_at_end(const ioopm_hash_table_iterator_t *it);
 
 /// @brief Move the iterator forward to the next entry if it exists or to at-the-end if no more entries exist
 /// @pre it is positioned at an entry
 /// @param it iterator operated upon
+/// @note asserts that it is not null
 void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it);
 
 /// @brief Get the key of the current entry
 /// @pre it is positioned at an entry
 /// @param it iterator operated upon
 /// @return the key of the current entry
+/// @note asserts that it is not null
 elem_t ioopm_hash_table_iterator_current_key(const ioopm_hash_table_iterator_t *it);
 
 /// @brief Get the value of the current entry
 /// @pre it is positioned at an entry
 /// @param it iterator operated upon
 /// @return the value if the current entry
+/// @note asserts that it is not null
 elem_t ioopm_hash_table_iterator_current_value(const ioopm_hash_table_iterator_t *it);
