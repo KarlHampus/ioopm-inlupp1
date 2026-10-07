@@ -9,6 +9,7 @@
 
 static const size_t primes[] = {17, 31, 67, 127, 257, 509, 1021, 2053, 4099, 8191, 16381,
                                 32749, 65521, 131071, 262139, 524287, 1048573};
+static const size_t last_prime_index = 16;
 
 // Static (private) functions
 
@@ -47,13 +48,16 @@ static void nothing_to_destroy(elem_t key, elem_t value)
     (void) value;
 }
 
-static void resize_hash_table(ioopm_hash_table_t *ht)
+static bool resize_hash_table(ioopm_hash_table_t *ht)
 {
+    if (ht->bucket_size_index >= last_prime_index) {
+        return false;
+    }
+
     size_t old_bucket_size = ht->bucket_size;
     ht->bucket_size = primes[++(ht->bucket_size_index)];
 
     entry_t **old_buckets = ht->buckets;
-
     ht->buckets = calloc(ht->bucket_size, sizeof(entry_t *));
     ht->size = 0;
 
@@ -69,6 +73,7 @@ static void resize_hash_table(ioopm_hash_table_t *ht)
     }
 
     free(old_buckets);
+    return true;
 }
 
 // Public functions
@@ -85,6 +90,7 @@ ioopm_hash_table_t *ioopm_hash_table_create_with_load_factor(
     ht->on_destroy_entry = &nothing_to_destroy;
     ht->bucket_size_index = 0;
     ht->load_factor = load_factor;
+    ht->can_resize = true;
     return ht;
 }
 
@@ -140,9 +146,9 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, elem_t va
         ht->size++;
 
         float current_load_factor = ht->size / ht->bucket_size;
-        if (current_load_factor > ht->load_factor)
+        if (current_load_factor > ht->load_factor && ht->can_resize)
         {
-            resize_hash_table(ht);
+            ht->can_resize = resize_hash_table(ht);
         }
     }
 }

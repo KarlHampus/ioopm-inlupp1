@@ -1,6 +1,7 @@
 #pragma once
 #include <stddef.h>
 #include "../common.h"
+#include <stdbool.h>
 
 typedef struct entry entry_t;
 
@@ -21,4 +22,5 @@ struct hash_table
     ioopm_on_destroy_entry_function *on_destroy_entry;
     size_t bucket_size_index;
     float load_factor;
+    bool can_resize;
 };
