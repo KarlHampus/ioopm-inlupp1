@@ -13,7 +13,6 @@
 /// @param ht a hash table containing the frequencies of the words found so far.
 void process_word(char *word, ioopm_hash_table_t *ht)
 {
-	// FIXME: Rewrite to match your own interface, error-handling, etc.
 	elem_t freq = int_elem(0);
 	elem_t key = string_elem(word);
 	ioopm_hash_table_lookup(ht, key, &freq);
