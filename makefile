@@ -1,6 +1,7 @@
 CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic
 DEPENDENCIES=hash_table/hash_table_iterator.o hash_table/hash_table.o common.o
+FILE=bibeln.txt
 
 all:
 	make -C hash_table/ all
@@ -14,17 +15,22 @@ clean:
 	rm -f *.gcda *.gcno *.gcov
 
 %.o: %.c %.h
-	$(CC) $(FLAGS) $< -c -o $@
+	$(CC) $(FLAGS) $< -c -o $@ -pg
 
 hash_table/hash_table.o: common.h
 
 hash_table/hash_table_iterator.o: hash_table/hash_table.h common.h
 
 freq_count: freq_count.c $(DEPENDENCIES)
-	$(CC) $(FLAGS) $^ -o $@ -lcunit
+	$(CC) $(FLAGS) $^ -o $@ -pg
 
 run_freq_count: freq_count
-	./freq_count 10k-words.txt
+	./freq_count $(FILE)
+
+gprof_freq_count: freq_count
+	make -B freq_count
+	./freq_count $(FILE)
+	gprof -Q freq_count
 
 test:
 	@make -C linked_list/ test

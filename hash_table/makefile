@@ -6,7 +6,7 @@ all: hash_table_iterator_tests hash_table_tests
 #	./$(TESTFILE)
 
 %.o: %.c %.h
-	$(CC) $(FLAGS) $< -c -o $@
+	$(CC) $(FLAGS) $< -c -o $@ 
 
 %_tests: %_tests.c $(DEPENDENCIES)
 	$(CC) $(FLAGS) $^ -o $@ -lcunit
