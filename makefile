@@ -36,4 +36,8 @@ memtest:
 	make -C hash_table/ memtest
 #	@make clean -s
 
-.PHONY: test clean memtest all run_freq_count
+coverage:
+	make -C hash_table/ coverage
+	make -C linked_list/ coverage
+
+.PHONY: test clean memtest all run_freq_count coverage
