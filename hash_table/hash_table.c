@@ -7,6 +7,9 @@
 #include <assert.h>
 #include <stddef.h>
 
+static const size_t primes[] = {17, 31, 67, 127, 257, 509, 1021, 2053, 4099, 8191, 16381,
+                                32749, 65521, 131071, 262139, 524287, 1048573};
+
 // Static (private) functions
 
 static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)
@@ -44,21 +47,51 @@ static void nothing_to_destroy(elem_t key, elem_t value)
     (void) value;
 }
 
+static void resize_hash_table(ioopm_hash_table_t *ht)
+{
+    size_t old_bucket_size = ht->bucket_size;
+    ht->bucket_size = primes[++(ht->bucket_size_index)];
+
+    entry_t **old_buckets = ht->buckets;
+
+    ht->buckets = calloc(ht->bucket_size, sizeof(entry_t *));
+    ht->size = 0;
+
+    entry_t *next = NULL;
+    for (size_t i = 0; i < old_bucket_size; i++)
+    {
+        for(entry_t *entry = old_buckets[i]; entry != NULL; entry = next)
+        {
+            ioopm_hash_table_insert(ht, entry->key, entry->value);
+            next = entry->next;
+            free(entry);
+        }
+    }
+
+    free(old_buckets);
+}
+
 // Public functions
 
-ioopm_hash_table_t *ioopm_hash_table_create(
-    size_t bucket_size, ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn)
+ioopm_hash_table_t *ioopm_hash_table_create_with_load_factor(
+    ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn, float load_factor)
 {
-    assert(bucket_size > 0);
-
     ioopm_hash_table_t *ht = calloc(1, sizeof(ioopm_hash_table_t));
-    ht->buckets = calloc(bucket_size, sizeof(entry_t *));
+    ht->buckets = calloc(primes[0], sizeof(entry_t *));
     ht->size = 0;
-    ht->bucket_size = bucket_size;
+    ht->bucket_size = primes[0];
     ht->key_equal_function = key_eq_fn;
     ht->hash_function = hash_fn;
     ht->on_destroy_entry = &nothing_to_destroy;
+    ht->bucket_size_index = 0;
+    ht->load_factor = load_factor;
     return ht;
+}
+
+ioopm_hash_table_t *ioopm_hash_table_create(
+    ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn)
+{
+    return ioopm_hash_table_create_with_load_factor(hash_fn, key_eq_fn, 0.75);
 }
 
 void ioopm_set_on_destroy_entry(ioopm_hash_table_t *ht,
@@ -105,6 +138,12 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, const elem_t key, elem_t va
     {
         *pointer_to_entry = entry_create(key, value, NULL);
         ht->size++;
+
+        float current_load_factor = ht->size / ht->bucket_size;
+        if (current_load_factor > ht->load_factor)
+        {
+            resize_hash_table(ht);
+        }
     }
 }
 

@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	ioopm_hash_table_t *ht = ioopm_hash_table_create(17, &ioopm_string_hash, &ioopm_string_equal);
+	ioopm_hash_table_t *ht = ioopm_hash_table_create(&ioopm_string_hash, &ioopm_string_equal);
 	ioopm_set_on_destroy_entry(ht, &ioopm_string_key_destroy);
 
 	for (int i = 1; i < argc; ++i)

@@ -18,14 +18,21 @@
 typedef struct hash_table ioopm_hash_table_t;
 
 /// @brief Create a new hash table with the default on_destroy_entry function as nothing
-///        to destroy, which doesn't free anything.
+///        to destroy, which doesn't free anything. Has a load factor of 0.75.
 /// @return A new empty hash table
-/// @param bucket_size the number of buckets
 /// @param hash_fn the hash function for hashing the keys
 /// @param key_eq_fn the equal function for comparing keys
-/// @note asserts that bucket size is greater than 0
-ioopm_hash_table_t *ioopm_hash_table_create(size_t bucket_size, ioopm_hash_function *hash_fn,
+ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function *hash_fn,
                                             ioopm_eq_function *key_eq_fn);
+
+/// @brief Create a new hash table with the default on_destroy_entry function as nothing
+///        to destroy, which doesn't free anything.
+/// @return A new empty hash table
+/// @param hash_fn the hash function for hashing the keys
+/// @param key_eq_fn the equal function for comparing keys
+/// @param load_factor the maximum load factor before increasing the number of buckets
+ioopm_hash_table_t *ioopm_hash_table_create_with_load_factor(
+    ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn, float load_factor);
 
 /// @brief sets the on_destroy_entry function in the hashtable which will be called
 //         each time an entry is destroyed

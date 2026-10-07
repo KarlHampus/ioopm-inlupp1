@@ -19,4 +19,6 @@ struct hash_table
     ioopm_eq_function *key_equal_function;
     ioopm_hash_function *hash_function;
     ioopm_on_destroy_entry_function *on_destroy_entry;
+    size_t bucket_size_index;
+    float load_factor;
 };
