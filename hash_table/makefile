@@ -28,4 +28,9 @@ test: $(TESTS)
 memtest: $(TESTS)
 	@for test in $(TESTS); do valgrind --leak-check=full ./$$test; done
 
-.PHONY: test clean memtest all
+coverage:
+	@make test -s > /dev/null
+	gcov hash_table.c
+	gcov hash_table_iterator.c
+
+.PHONY: test clean memtest all coverage
