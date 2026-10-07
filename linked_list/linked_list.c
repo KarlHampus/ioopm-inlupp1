@@ -20,17 +20,6 @@ static void link_destroy(link_t *link)
     free(link);
 }
 
-static link_t **find_pointer_to_link_iterative(link_t **start, size_t index)
-{
-    while (*start != NULL && index != 0)
-    {
-        start = &(*start)->next;
-        index--;
-    }
-
-    return start;
-}
-
 static link_t **find_pointer_to_link(link_t **start, size_t index)
 {
     if (*start == NULL || index == 0)
@@ -137,7 +126,7 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t elem)
     }
     else
     {
-        link_t **pointer_to_link = find_pointer_to_link_iterative(&list->first, index);
+        link_t **pointer_to_link = find_pointer_to_link(&list->first, index);
 
         link_t *link_to_move = *pointer_to_link;
         link_t *link_to_insert = link_create(elem, link_to_move);
