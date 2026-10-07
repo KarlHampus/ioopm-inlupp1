@@ -70,21 +70,36 @@ User time (seconds): 0.62
 System time (seconds): 0.37
 Percent of CPU this job got: 98%
 Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.01
-Average shared text size (kbytes): 0
-Average unshared data size (kbytes): 0
-Average stack size (kbytes): 0
-Average total size (kbytes): 0
-Maximum resident set size (kbytes): 6656
-Average resident set size (kbytes): 0
-Major (requiring I/O) page faults: 3
-Minor (reclaiming a frame) page faults: 1358
-Voluntary context switches: 13
-Involuntary context switches: 5
-Swaps: 0
-File system inputs: 10112
-File system outputs: 64
-Socket messages sent: 0
-Socket messages received: 0
-Signals delivered: 0
-Page size (bytes): 4096
-Exit status: 0
+
+### Profiling results after rewriting hash_table to be dynamic
+# Top 3 functions for small, 16k and the bible
+small.txt:
+Calls   % time   Self s   Name
+78      0.00     0.00     ioopm_string_equal
+71      0.00     0.00     find_pointer_to_entry
+71      0.00     0.00     ioopm_string_hash
+
+16k-words.txt:
+Calls   % time   Self s   Name
+42165   0.00     0.00     find_pointer_to_entry
+42165   0.00     0.00     ioopm_string_hash
+41664   0.00     0.00     ioopm_string_equal
+
+bibeln.txt:
+Calls     % time   Self s   Name
+1543310   50.00    0.03     find_pointer_to_entry
+1543310   16.67    0.01     ioopm_string_hash
+804406    16.67    0.01     ioopm_hash_table_insert
+1827855   0.00     0.00     ioopm_string_equal          (not top 3 anymore)
+
+# New time results
+Command being timed: "./freq_count bibeln.txt"
+User time (seconds): 0.21
+System time (seconds): 0.13
+Percent of CPU this job got: 99%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.34
+
+# Discussion
+With the new dynamic hash table we can see that the self time of the top 3 functions significantly was reduced, as well as the number of calls. The ioopm_string_equal for the bibeln.txt file went from about 400'000'000 calls to just over 1'800'000 calls, and from 0.48 seconds down to 0.00 seconds, putting it outside the top 3 functions when running on bibeln.txt.
+
+For the function find_pointer_to_entry, the calls went up but the time went down. This is because when resizing the hash table we insert each entry again, increasing the number of calls to the function. However the time of the function went down because it did not have to iterate through a long list linked entries in the bucket when searching for the right entry. 
