@@ -7,7 +7,7 @@ Run "make test".
 
 # Running the freq_count program
 Compile with "make freq_count".
-To run the program with a custom file, do "hash_table/freq_count " followed by the file to count the words.
+To run the program with a custom file, do "freq_count " followed by the file to count the words.
 To run the program with included file 10k-words.txt, run "make run_freq_count".
 
 ### Design decisions
