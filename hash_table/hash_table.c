@@ -50,6 +50,8 @@ static void nothing_to_destroy(elem_t key, elem_t value)
 
 static bool resize_hash_table(ioopm_hash_table_t *ht)
 {
+    // The bucket increases are hard coded to pre-defined primes
+    // and can therefore not be greater than last_prime_index.
     if (ht->bucket_size_index >= last_prime_index) {
         return false;
     }
