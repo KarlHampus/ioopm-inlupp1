@@ -9,9 +9,16 @@
  * @date Tuesday the 15th of September 2026
  * @brief Simple hash table that maps string keys to integer values.
  *
- * TODO: Here typically goes a more extensive explanation of what the header
- * defines. Doxygens tags are words preceeded by either a backslash @\
- * or by an at symbol @@.
+ * Hash tables provide a way to store key-value entries accessable by the key.
+ * The lookup time for a hash table is constant making it great for storing large
+ * amounts of unorded data based on a single key input.
+ *
+ * The hash table has an on entry destroy function which can be set optionally.
+ * This function would be called right before freeing an entry and can be used to
+ * move the ownership of the keys and values to the hash table. With the optional
+ * function the user can define how the memory of the keys and values should be freed.
+ * This function is not passed in the creation, but rather as its own function called
+ * ioopm_set_on_destroy_entry.
  *
  */
 
