@@ -43,7 +43,7 @@ memtest:
 #	@make clean -s
 
 coverage:
-	make -C hash_table/ coverage
-	make -C linked_list/ coverage
+	make -C hash_table/ coverage COVFLAGS="$(COVFLAGS)"
+	make -C linked_list/ coverage COVFLAGS="$(COVFLAGS)"
 
 .PHONY: test clean memtest all run_freq_count coverage
