@@ -1,12 +1,13 @@
 CC=gcc
 FLAGS=--coverage -g -Wall -Wextra -pedantic
 DEPENDENCIES=hash_table_iterator.o hash_table.o ../common.o
+COVFLAGS=
 
 all: hash_table_iterator_tests hash_table_tests
 #	./$(TESTFILE)
 
 %.o: %.c %.h
-	$(CC) $(FLAGS) $< -c -o $@ 
+	$(CC) $(FLAGS) $< -c -o $@
 
 %_tests: %_tests.c $(DEPENDENCIES)
 	$(CC) $(FLAGS) $^ -o $@ -lcunit
@@ -30,7 +31,7 @@ memtest: $(TESTS)
 
 coverage:
 	@make test -s > /dev/null
-	gcov hash_table.c
-	gcov hash_table_iterator.c
+	gcov hash_table.c $(COVFLAGS)
+	gcov hash_table_iterator.c $(COVFLAGS)
 
 .PHONY: test clean memtest all coverage

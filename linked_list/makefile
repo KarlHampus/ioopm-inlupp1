@@ -30,7 +30,7 @@ memtest: $(TESTS)
 
 coverage:
 	@make test -s > /dev/null
-	gcov linked_list.c
-	gcov linked_list_iterator.c
+	gcov $(COVFLAGS) linked_list.c
+	gcov $(COVFLAGS) linked_list_iterator.c
 
 .PHONY: test clean memtest all coverage
