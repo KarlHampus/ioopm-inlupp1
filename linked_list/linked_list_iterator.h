@@ -3,6 +3,18 @@
 
 #include "linked_list.h"
 
+/**
+* @file linked_list_iterator.h
+* @author Hampus Thell, Olof Halvarsson
+* @date  1st Oct 2026
+* @brief Simple linked list iterator
+*
+* Linked list iterators provide an interface to iterate through all entries in a linked list.
+* An iterator is either positioned at an entry, called the current entry, or it is positioned at-the-end, if it has already iterated through all entries.
+* If the underlying linked list of an iterator is modified using any non-iterator function, the iterator is invalidated and should not be used anymore.
+*
+*/
+
 typedef struct list_iterator ioopm_list_iterator_t;
 
 /// @brief Create a new iterator

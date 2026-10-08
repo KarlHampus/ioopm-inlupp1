@@ -7,7 +7,7 @@
  * @file hash_table.h
  * @author Olof Halvarsson & Hampus Thell
  * @date Tuesday the 15th of September 2026
- * @brief Simple hash table that maps string keys to integer values.
+ * @brief Simple hash table that maps keys to values.
  *
  * Hash tables provide a way to store key-value entries accessable by the key.
  * The lookup time for a hash table is constant making it great for storing large

@@ -4,6 +4,13 @@
 #include <stddef.h>
 #include "../common.h"
 
+/**
+ * @file linked_list.h
+ * @author Olof Halvarsson & Hampus Thell
+ * @date Monday the 28th of September 2026
+ * @brief Simple linked list that stores values linked to the next entry.
+ */
+
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
 
 /// @brief Creates a new empty list
