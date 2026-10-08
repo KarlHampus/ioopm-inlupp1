@@ -48,6 +48,24 @@ static void nothing_to_destroy(elem_t key, elem_t value)
     (void) value;
 }
 
+static void insert_entries_from_old_buckets(
+    ioopm_hash_table_t *ht, entry_t **old_buckets, size_t old_bucket_size)
+{
+    // Go through each old bucket
+    entry_t *next = NULL;
+    for (size_t i = 0; i < old_bucket_size; i++)
+    {
+        // Go through each entry in the current bucket
+        for(entry_t *entry = old_buckets[i]; entry != NULL; entry = next)
+        {
+            // Insert into the new bucket and free the old entry
+            ioopm_hash_table_insert(ht, entry->key, entry->value);
+            next = entry->next;
+            free(entry);
+        }
+    }
+}
+
 static bool resize_hash_table(ioopm_hash_table_t *ht)
 {
     // The bucket increases are hard coded to pre-defined primes
@@ -56,23 +74,19 @@ static bool resize_hash_table(ioopm_hash_table_t *ht)
         return false;
     }
 
+    // Save the old bucket size and then update it
     size_t old_bucket_size = ht->bucket_size;
-    ht->bucket_size = primes[++(ht->bucket_size_index)];
+    ht->bucket_size_index++;
+    ht->bucket_size = primes[ht->bucket_size_index];
 
+    // Save pointer to old buckets
     entry_t **old_buckets = ht->buckets;
+
+    // Allocate memory for new buckets array and reset size
     ht->buckets = calloc(ht->bucket_size, sizeof(entry_t *));
     ht->size = 0;
 
-    entry_t *next = NULL;
-    for (size_t i = 0; i < old_bucket_size; i++)
-    {
-        for(entry_t *entry = old_buckets[i]; entry != NULL; entry = next)
-        {
-            ioopm_hash_table_insert(ht, entry->key, entry->value);
-            next = entry->next;
-            free(entry);
-        }
-    }
+    insert_entries_from_old_buckets(ht, old_buckets, old_bucket_size);
 
     free(old_buckets);
     return true;
